@@ -12,5 +12,11 @@ namespace WinFormsApp1
             ClubsForm clubsForm = new ClubsForm();
             clubsForm.ShowDialog();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            PlayersForm playersForm = new PlayersForm();
+            playersForm.ShowDialog();
+        }
     }
 }
