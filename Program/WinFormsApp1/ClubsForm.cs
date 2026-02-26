@@ -30,6 +30,7 @@ namespace WinFormsApp1
             _db = new FootballManagerContext(connString);
             _db.Clubs.Load();
             clubBindingSource.DataSource = _db.Clubs.Local.ToBindingList();
+            dataGridViewClubs.SelectionChanged += (s, ev) => LoadSelectedClubToTextBoxes();
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
@@ -40,14 +41,25 @@ namespace WinFormsApp1
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
+            if (dataGridViewClubs.CurrentRow == null)
+                return;
+
+            var selectedClub = dataGridViewClubs.CurrentRow.DataBoundItem as Club;
+            if (selectedClub == null)
+                return;
+
             try
             {
-                this.Validate();
-                clubBindingSource.EndEdit();
-
+                // Validate textbox input first
                 if (!ValidateClubs())
                     return;
 
+                // Update entity from textboxes
+                selectedClub.Name = textBoxName.Text.Trim();
+                selectedClub.City = textBoxCity.Text.Trim();
+                selectedClub.Stadium = textBoxStadium.Text.Trim();
+
+                clubBindingSource.ResetBindings(false);
                 _db.SaveChanges();
 
                 MessageBox.Show("Промените бяха запазени!");
@@ -62,13 +74,24 @@ namespace WinFormsApp1
         {
             var newClub = new Club
             {
-                Name = "New Club",
-                City = "City",
-                Stadium = "Stadium"
+                Name = "",
+                City = "",
+                Stadium = ""
             };
 
             _db.Clubs.Add(newClub);
             clubBindingSource.ResetBindings(false);
+
+            // Select the newly added row
+            dataGridViewClubs.ClearSelection();
+            int rowIndex = clubBindingSource.IndexOf(newClub);
+            if (rowIndex >= 0)
+            {
+                dataGridViewClubs.Rows[rowIndex].Selected = true;
+                dataGridViewClubs.CurrentCell = dataGridViewClubs.Rows[rowIndex].Cells[0];
+            }
+
+            LoadSelectedClubToTextBoxes();
         }
 
         private void buttonDelete_Click(object sender, EventArgs e)
@@ -124,40 +147,46 @@ namespace WinFormsApp1
 
         private bool ValidateClubs()
         {
-            var clubs = _db.Clubs.Local;
+            string name = textBoxName.Text.Trim();
+            string city = textBoxCity.Text.Trim();
+            string stadium = textBoxStadium.Text.Trim();
 
-            foreach (var club in clubs)
+            if (string.IsNullOrWhiteSpace(name) ||
+                string.IsNullOrWhiteSpace(city) ||
+                string.IsNullOrWhiteSpace(stadium))
             {
-                // Required fields check
-                if (string.IsNullOrWhiteSpace(club.Name) ||
-                    string.IsNullOrWhiteSpace(club.City) ||
-                    string.IsNullOrWhiteSpace(club.Stadium))
-                {
-                    MessageBox.Show("Име, град и стадион са задължителни!");
-                    return false;
-                }
-
-                if (club.Name == "New Club" || club.City == "City" || club.Stadium == "Stadium")
-                {
-                    MessageBox.Show("Име, град и стадион трябва да са истински имена!");
-                    return false;
-                }
+                MessageBox.Show("Име, град и стадион са задължителни!");
+                return false;
             }
 
-            // Duplicate name check
-            var duplicateNames = clubs
-                .GroupBy(c => c.Name.Trim().ToLower())
-                .Where(g => g.Count() > 1)
-                .Select(g => g.Key)
-                .ToList();
+            // Duplicate name check (excluding current entity)
+            var selectedClub = dataGridViewClubs.CurrentRow?.DataBoundItem as Club;
 
-            if (duplicateNames.Any())
+            bool duplicateExists = _db.Clubs.Local
+                .Any(c => c != selectedClub &&
+                          c.Name.ToLower().Trim() == name.ToLower());
+
+            if (duplicateExists)
             {
-                MessageBox.Show("Има дублирани имена на клубове!");
+                MessageBox.Show("Има клуб със същото име!");
                 return false;
             }
 
             return true;
+        }
+
+        private void LoadSelectedClubToTextBoxes()
+        {
+            if (dataGridViewClubs.CurrentRow == null)
+                return;
+
+            var selectedClub = dataGridViewClubs.CurrentRow.DataBoundItem as Club;
+            if (selectedClub == null)
+                return;
+
+            textBoxName.Text = selectedClub.Name;
+            textBoxCity.Text = selectedClub.City;
+            textBoxStadium.Text = selectedClub.Stadium;
         }
     }
 }
