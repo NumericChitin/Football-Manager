@@ -37,16 +37,6 @@
             buttonDelete = new Button();
             buttonSave = new Button();
             dataGridViewPlayers = new DataGridView();
-            playerIdDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            fullNameDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            dateOfBirthDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            nationalityDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            positionDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            numberDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            dominantFootDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            salaryDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            statusDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            clubDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             playerBindingSource = new BindingSource(components);
             buttonAdd = new Button();
             label4 = new Label();
@@ -62,6 +52,16 @@
             comboBoxClubName = new ComboBox();
             dateTimePickerBirthDate = new DateTimePicker();
             comboBoxStatus = new ComboBox();
+            playerIdDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            fullNameDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            dateOfBirthDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            nationalityDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            positionDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            numberDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            dominantFootDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            salaryDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            statusDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            ClubName = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)dataGridViewPlayers).BeginInit();
             ((System.ComponentModel.ISupportInitialize)playerBindingSource).BeginInit();
             SuspendLayout();
@@ -138,7 +138,7 @@
             // 
             dataGridViewPlayers.AutoGenerateColumns = false;
             dataGridViewPlayers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewPlayers.Columns.AddRange(new DataGridViewColumn[] { playerIdDataGridViewTextBoxColumn, fullNameDataGridViewTextBoxColumn, dateOfBirthDataGridViewTextBoxColumn, nationalityDataGridViewTextBoxColumn, positionDataGridViewTextBoxColumn, numberDataGridViewTextBoxColumn, dominantFootDataGridViewTextBoxColumn, salaryDataGridViewTextBoxColumn, statusDataGridViewTextBoxColumn, clubDataGridViewTextBoxColumn });
+            dataGridViewPlayers.Columns.AddRange(new DataGridViewColumn[] { playerIdDataGridViewTextBoxColumn, fullNameDataGridViewTextBoxColumn, dateOfBirthDataGridViewTextBoxColumn, nationalityDataGridViewTextBoxColumn, positionDataGridViewTextBoxColumn, numberDataGridViewTextBoxColumn, dominantFootDataGridViewTextBoxColumn, salaryDataGridViewTextBoxColumn, statusDataGridViewTextBoxColumn, ClubName });
             dataGridViewPlayers.DataSource = playerBindingSource;
             dataGridViewPlayers.Location = new Point(10, 190);
             dataGridViewPlayers.Margin = new Padding(3, 2, 3, 2);
@@ -146,80 +146,6 @@
             dataGridViewPlayers.RowHeadersWidth = 51;
             dataGridViewPlayers.Size = new Size(928, 184);
             dataGridViewPlayers.TabIndex = 11;
-            // 
-            // playerIdDataGridViewTextBoxColumn
-            // 
-            playerIdDataGridViewTextBoxColumn.DataPropertyName = "PlayerId";
-            playerIdDataGridViewTextBoxColumn.HeaderText = "ID";
-            playerIdDataGridViewTextBoxColumn.Name = "playerIdDataGridViewTextBoxColumn";
-            playerIdDataGridViewTextBoxColumn.ReadOnly = true;
-            playerIdDataGridViewTextBoxColumn.Width = 50;
-            // 
-            // fullNameDataGridViewTextBoxColumn
-            // 
-            fullNameDataGridViewTextBoxColumn.DataPropertyName = "FullName";
-            fullNameDataGridViewTextBoxColumn.HeaderText = "Име";
-            fullNameDataGridViewTextBoxColumn.Name = "fullNameDataGridViewTextBoxColumn";
-            fullNameDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // dateOfBirthDataGridViewTextBoxColumn
-            // 
-            dateOfBirthDataGridViewTextBoxColumn.DataPropertyName = "DateOfBirth";
-            dateOfBirthDataGridViewTextBoxColumn.HeaderText = "Рождена дата";
-            dateOfBirthDataGridViewTextBoxColumn.Name = "dateOfBirthDataGridViewTextBoxColumn";
-            dateOfBirthDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // nationalityDataGridViewTextBoxColumn
-            // 
-            nationalityDataGridViewTextBoxColumn.DataPropertyName = "Nationality";
-            nationalityDataGridViewTextBoxColumn.HeaderText = "Националност";
-            nationalityDataGridViewTextBoxColumn.Name = "nationalityDataGridViewTextBoxColumn";
-            nationalityDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // positionDataGridViewTextBoxColumn
-            // 
-            positionDataGridViewTextBoxColumn.DataPropertyName = "Position";
-            positionDataGridViewTextBoxColumn.HeaderText = "Позиция";
-            positionDataGridViewTextBoxColumn.Name = "positionDataGridViewTextBoxColumn";
-            positionDataGridViewTextBoxColumn.ReadOnly = true;
-            positionDataGridViewTextBoxColumn.Width = 75;
-            // 
-            // numberDataGridViewTextBoxColumn
-            // 
-            numberDataGridViewTextBoxColumn.DataPropertyName = "Number";
-            numberDataGridViewTextBoxColumn.HeaderText = "Номер";
-            numberDataGridViewTextBoxColumn.Name = "numberDataGridViewTextBoxColumn";
-            numberDataGridViewTextBoxColumn.ReadOnly = true;
-            numberDataGridViewTextBoxColumn.Width = 75;
-            // 
-            // dominantFootDataGridViewTextBoxColumn
-            // 
-            dominantFootDataGridViewTextBoxColumn.DataPropertyName = "DominantFoot";
-            dominantFootDataGridViewTextBoxColumn.HeaderText = "Доминираш крак";
-            dominantFootDataGridViewTextBoxColumn.Name = "dominantFootDataGridViewTextBoxColumn";
-            dominantFootDataGridViewTextBoxColumn.ReadOnly = true;
-            dominantFootDataGridViewTextBoxColumn.Width = 75;
-            // 
-            // salaryDataGridViewTextBoxColumn
-            // 
-            salaryDataGridViewTextBoxColumn.DataPropertyName = "Salary";
-            salaryDataGridViewTextBoxColumn.HeaderText = "Заплата";
-            salaryDataGridViewTextBoxColumn.Name = "salaryDataGridViewTextBoxColumn";
-            salaryDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // statusDataGridViewTextBoxColumn
-            // 
-            statusDataGridViewTextBoxColumn.DataPropertyName = "Status";
-            statusDataGridViewTextBoxColumn.HeaderText = "Статус";
-            statusDataGridViewTextBoxColumn.Name = "statusDataGridViewTextBoxColumn";
-            statusDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // clubDataGridViewTextBoxColumn
-            // 
-            clubDataGridViewTextBoxColumn.DataPropertyName = "Club";
-            clubDataGridViewTextBoxColumn.HeaderText = "Клуб";
-            clubDataGridViewTextBoxColumn.Name = "clubDataGridViewTextBoxColumn";
-            clubDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // playerBindingSource
             // 
@@ -350,6 +276,80 @@
             comboBoxStatus.Size = new Size(154, 23);
             comboBoxStatus.TabIndex = 37;
             // 
+            // playerIdDataGridViewTextBoxColumn
+            // 
+            playerIdDataGridViewTextBoxColumn.DataPropertyName = "PlayerId";
+            playerIdDataGridViewTextBoxColumn.HeaderText = "ID";
+            playerIdDataGridViewTextBoxColumn.Name = "playerIdDataGridViewTextBoxColumn";
+            playerIdDataGridViewTextBoxColumn.ReadOnly = true;
+            playerIdDataGridViewTextBoxColumn.Width = 50;
+            // 
+            // fullNameDataGridViewTextBoxColumn
+            // 
+            fullNameDataGridViewTextBoxColumn.DataPropertyName = "FullName";
+            fullNameDataGridViewTextBoxColumn.HeaderText = "Име";
+            fullNameDataGridViewTextBoxColumn.Name = "fullNameDataGridViewTextBoxColumn";
+            fullNameDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // dateOfBirthDataGridViewTextBoxColumn
+            // 
+            dateOfBirthDataGridViewTextBoxColumn.DataPropertyName = "DateOfBirth";
+            dateOfBirthDataGridViewTextBoxColumn.HeaderText = "Рождена дата";
+            dateOfBirthDataGridViewTextBoxColumn.Name = "dateOfBirthDataGridViewTextBoxColumn";
+            dateOfBirthDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // nationalityDataGridViewTextBoxColumn
+            // 
+            nationalityDataGridViewTextBoxColumn.DataPropertyName = "Nationality";
+            nationalityDataGridViewTextBoxColumn.HeaderText = "Националност";
+            nationalityDataGridViewTextBoxColumn.Name = "nationalityDataGridViewTextBoxColumn";
+            nationalityDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // positionDataGridViewTextBoxColumn
+            // 
+            positionDataGridViewTextBoxColumn.DataPropertyName = "Position";
+            positionDataGridViewTextBoxColumn.HeaderText = "Позиция";
+            positionDataGridViewTextBoxColumn.Name = "positionDataGridViewTextBoxColumn";
+            positionDataGridViewTextBoxColumn.ReadOnly = true;
+            positionDataGridViewTextBoxColumn.Width = 75;
+            // 
+            // numberDataGridViewTextBoxColumn
+            // 
+            numberDataGridViewTextBoxColumn.DataPropertyName = "Number";
+            numberDataGridViewTextBoxColumn.HeaderText = "Номер";
+            numberDataGridViewTextBoxColumn.Name = "numberDataGridViewTextBoxColumn";
+            numberDataGridViewTextBoxColumn.ReadOnly = true;
+            numberDataGridViewTextBoxColumn.Width = 75;
+            // 
+            // dominantFootDataGridViewTextBoxColumn
+            // 
+            dominantFootDataGridViewTextBoxColumn.DataPropertyName = "DominantFoot";
+            dominantFootDataGridViewTextBoxColumn.HeaderText = "Доминираш крак";
+            dominantFootDataGridViewTextBoxColumn.Name = "dominantFootDataGridViewTextBoxColumn";
+            dominantFootDataGridViewTextBoxColumn.ReadOnly = true;
+            dominantFootDataGridViewTextBoxColumn.Width = 75;
+            // 
+            // salaryDataGridViewTextBoxColumn
+            // 
+            salaryDataGridViewTextBoxColumn.DataPropertyName = "Salary";
+            salaryDataGridViewTextBoxColumn.HeaderText = "Заплата";
+            salaryDataGridViewTextBoxColumn.Name = "salaryDataGridViewTextBoxColumn";
+            salaryDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // statusDataGridViewTextBoxColumn
+            // 
+            statusDataGridViewTextBoxColumn.DataPropertyName = "Status";
+            statusDataGridViewTextBoxColumn.HeaderText = "Статус";
+            statusDataGridViewTextBoxColumn.Name = "statusDataGridViewTextBoxColumn";
+            statusDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // ClubName
+            // 
+            ClubName.DataPropertyName = "ClubName";
+            ClubName.HeaderText = "Клуб";
+            ClubName.Name = "ClubName";
+            ClubName.ReadOnly = true;
+            // 
             // PlayersForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -379,6 +379,7 @@
             Controls.Add(buttonAdd);
             Name = "PlayersForm";
             Text = "PlayersForm";
+            Load += PlayersForm_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridViewPlayers).EndInit();
             ((System.ComponentModel.ISupportInitialize)playerBindingSource).EndInit();
             ResumeLayout(false);
@@ -397,16 +398,6 @@
         private DataGridView dataGridViewPlayers;
         private BindingSource playerBindingSource;
         private Button buttonAdd;
-        private DataGridViewTextBoxColumn playerIdDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn fullNameDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn dateOfBirthDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn nationalityDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn positionDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn numberDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn dominantFootDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn salaryDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn statusDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn clubDataGridViewTextBoxColumn;
         private Label label4;
         private Label label5;
         private Label label6;
@@ -420,5 +411,15 @@
         private ComboBox comboBoxClubName;
         private DateTimePicker dateTimePickerBirthDate;
         private ComboBox comboBoxStatus;
+        private DataGridViewTextBoxColumn playerIdDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn fullNameDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn dateOfBirthDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn nationalityDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn positionDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn numberDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn dominantFootDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn salaryDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn statusDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn ClubName;
     }
 }

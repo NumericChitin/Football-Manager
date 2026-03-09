@@ -36,4 +36,6 @@ public partial class Player
     public virtual ICollection<Goal> Goals { get; set; } = new List<Goal>();
 
     public virtual ICollection<Transfer> Transfers { get; set; } = new List<Transfer>();
+
+    public string ClubName => Club?.Name;
 }
