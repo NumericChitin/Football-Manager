@@ -24,4 +24,10 @@ public partial class Transfer
     public virtual Club ClubToNavigation { get; set; } = null!;
 
     public virtual Player Player { get; set; } = null!;
+
+    public string ClubFromName => ClubFromNavigation?.Name;
+
+    public string ClubToName => ClubToNavigation?.Name;
+
+    public string PlayerName => Player?.FullName;
 }

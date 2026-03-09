@@ -18,5 +18,11 @@ namespace WinFormsApp1
             PlayersForm playersForm = new PlayersForm();
             playersForm.ShowDialog();
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            TransfersForm transfersForm = new TransfersForm();
+            transfersForm.ShowDialog();
+        }
     }
 }
