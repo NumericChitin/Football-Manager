@@ -64,8 +64,6 @@ namespace WinFormsApp1
 
             // Transfer type options
             comboBoxTransferType.Items.AddRange(new[] { "permanent", "temporary" });
-
-            dataGridView1.SelectionChanged += (s, ev) => LoadSelectedTransferToInputs();
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
@@ -84,28 +82,26 @@ namespace WinFormsApp1
 
             var newTransfer = new Transfer
             {
-                PlayerId = _db.Players.First().PlayerId,
-                ClubFrom = _db.Clubs.First().ClubId,
-                ClubTo = _db.Clubs.First().ClubId,
-                Date = DateOnly.FromDateTime(DateTime.Today),
-                Type = "",
-                Comment = ""
+                PlayerId = (int)comboBoxPlayer.SelectedValue,
+                ClubFrom = (int)comboBoxClubFrom.SelectedValue,
+                ClubTo = (int)comboBoxClubTo.SelectedValue,
+                Date = DateOnly.FromDateTime(dateTimePickerTransferDate.Value),
+                Type = comboBoxTransferType.SelectedItem?.ToString(),
+                Comment = textBoxComment.Text.Trim()
             };
 
             _db.Transfers.Add(newTransfer);
-            transferBindingSource.ResetBindings(false);
 
-            dataGridView1.ClearSelection();
+            transferBindingSource.ResetBindings(false);
 
             int index = transferBindingSource.IndexOf(newTransfer);
 
             if (index >= 0)
             {
+                dataGridView1.ClearSelection();
                 dataGridView1.Rows[index].Selected = true;
                 dataGridView1.CurrentCell = dataGridView1.Rows[index].Cells[0];
             }
-
-            LoadSelectedTransferToInputs();
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
@@ -117,6 +113,16 @@ namespace WinFormsApp1
             if (transfer == null)
                 return;
 
+            // Check if this transfer already exists in DB
+            bool exists = _db.Transfers.AsNoTracking()
+                .Any(t => t.TransferId == transfer.TransferId);
+
+            if (exists)
+            {
+                MessageBox.Show("Редактирането на съществуващи трансфери не е позволено.");
+                return;
+            }
+
             if (!ValidateTransfers())
                 return;
 
@@ -127,21 +133,21 @@ namespace WinFormsApp1
                 transfer.ClubTo = (int)comboBoxClubTo.SelectedValue;
 
                 transfer.Date = DateOnly.FromDateTime(dateTimePickerTransferDate.Value);
-
                 transfer.Type = comboBoxTransferType.SelectedItem?.ToString();
                 transfer.Comment = textBoxComment.Text.Trim();
 
-                // Update player's current club
+                // Update player's club ONLY for new transfers
                 var player = _db.Players.Find(transfer.PlayerId);
                 if (player != null)
                 {
                     player.ClubId = transfer.ClubTo;
                 }
 
-                transferBindingSource.ResetBindings(false);
                 _db.SaveChanges();
 
-                MessageBox.Show("Промените бяха запазени!");
+                transferBindingSource.ResetBindings(false);
+
+                MessageBox.Show("Трансферът беше запазен!");
             }
             catch (Exception ex)
             {
@@ -184,24 +190,31 @@ namespace WinFormsApp1
             return true;
         }
 
-        private void LoadSelectedTransferToInputs()
-        {
-            if (dataGridView1.CurrentRow == null)
-                return;
+        //Method now obsolete
+        //private void LoadSelectedTransferToInputs()
+        //{
+        //    if (dataGridView1.CurrentRow == null)
+        //        return;
 
-            var transfer = dataGridView1.CurrentRow.DataBoundItem as Transfer;
-            if (transfer == null)
-                return;
+        //    var transfer = dataGridView1.CurrentRow.DataBoundItem as Transfer;
+        //    if (transfer == null)
+        //        return;
 
-            comboBoxPlayer.SelectedValue = transfer.PlayerId;
-            comboBoxClubFrom.SelectedValue = transfer.ClubFrom;
-            comboBoxClubTo.SelectedValue = transfer.ClubTo;
+        //    var entry = _db.Entry(transfer);
 
-            dateTimePickerTransferDate.Value = transfer.Date.ToDateTime(TimeOnly.MinValue);
+        //    // Do NOT load existing transfers
+        //    if (entry.State != EntityState.Added)
+        //        return;
 
-            comboBoxTransferType.SelectedItem = transfer.Type;
-            textBoxComment.Text = transfer.Comment;
-        }
+        //    comboBoxPlayer.SelectedValue = transfer.PlayerId;
+        //    comboBoxClubFrom.SelectedValue = transfer.ClubFrom;
+        //    comboBoxClubTo.SelectedValue = transfer.ClubTo;
+
+        //    dateTimePickerTransferDate.Value = transfer.Date.ToDateTime(TimeOnly.MinValue);
+
+        //    comboBoxTransferType.SelectedItem = transfer.Type;
+        //    textBoxComment.Text = transfer.Comment;
+        //}
 
         private void ComboBoxPlayer_SelectedIndexChanged(object sender, EventArgs e)
         {
