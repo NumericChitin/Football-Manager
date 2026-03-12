@@ -30,6 +30,13 @@
         {
             components = new System.ComponentModel.Container();
             dataGridView1 = new DataGridView();
+            transferIdDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            playerDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            clubFromDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            clubToDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            dateDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            typeDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            commentDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             transferBindingSource = new BindingSource(components);
             buttonClearFilters = new Button();
             buttonSave = new Button();
@@ -80,6 +87,57 @@
             dataGridView1.Size = new Size(772, 383);
             dataGridView1.TabIndex = 0;
             // 
+            // transferIdDataGridViewTextBoxColumn
+            // 
+            transferIdDataGridViewTextBoxColumn.DataPropertyName = "TransferId";
+            transferIdDataGridViewTextBoxColumn.HeaderText = "ID";
+            transferIdDataGridViewTextBoxColumn.Name = "transferIdDataGridViewTextBoxColumn";
+            transferIdDataGridViewTextBoxColumn.ReadOnly = true;
+            transferIdDataGridViewTextBoxColumn.Width = 50;
+            // 
+            // playerDataGridViewTextBoxColumn
+            // 
+            playerDataGridViewTextBoxColumn.DataPropertyName = "PlayerName";
+            playerDataGridViewTextBoxColumn.HeaderText = "Играч";
+            playerDataGridViewTextBoxColumn.Name = "playerDataGridViewTextBoxColumn";
+            playerDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // clubFromDataGridViewTextBoxColumn
+            // 
+            clubFromDataGridViewTextBoxColumn.DataPropertyName = "ClubFromName";
+            clubFromDataGridViewTextBoxColumn.HeaderText = "Клуб от";
+            clubFromDataGridViewTextBoxColumn.Name = "clubFromDataGridViewTextBoxColumn";
+            clubFromDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // clubToDataGridViewTextBoxColumn
+            // 
+            clubToDataGridViewTextBoxColumn.DataPropertyName = "ClubToName";
+            clubToDataGridViewTextBoxColumn.HeaderText = "Клуб до";
+            clubToDataGridViewTextBoxColumn.Name = "clubToDataGridViewTextBoxColumn";
+            clubToDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // dateDataGridViewTextBoxColumn
+            // 
+            dateDataGridViewTextBoxColumn.DataPropertyName = "Date";
+            dateDataGridViewTextBoxColumn.HeaderText = "Дата";
+            dateDataGridViewTextBoxColumn.Name = "dateDataGridViewTextBoxColumn";
+            dateDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // typeDataGridViewTextBoxColumn
+            // 
+            typeDataGridViewTextBoxColumn.DataPropertyName = "Type";
+            typeDataGridViewTextBoxColumn.HeaderText = "Вид трансфер";
+            typeDataGridViewTextBoxColumn.Name = "typeDataGridViewTextBoxColumn";
+            typeDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // commentDataGridViewTextBoxColumn
+            // 
+            commentDataGridViewTextBoxColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            commentDataGridViewTextBoxColumn.DataPropertyName = "Comment";
+            commentDataGridViewTextBoxColumn.HeaderText = "Коментар";
+            commentDataGridViewTextBoxColumn.Name = "commentDataGridViewTextBoxColumn";
+            commentDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
             // transferBindingSource
             // 
             transferBindingSource.DataSource = typeof(Data.Models.Transfer);
@@ -122,6 +180,7 @@
             // 
             // comboBoxClubFrom
             // 
+            comboBoxClubFrom.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxClubFrom.FormattingEnabled = true;
             comboBoxClubFrom.Location = new Point(200, 36);
             comboBoxClubFrom.Name = "comboBoxClubFrom";
@@ -140,6 +199,7 @@
             // 
             // comboBoxClubTo
             // 
+            comboBoxClubTo.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxClubTo.FormattingEnabled = true;
             comboBoxClubTo.Location = new Point(377, 36);
             comboBoxClubTo.Name = "comboBoxClubTo";
@@ -175,6 +235,7 @@
             // 
             // comboBoxPlayer
             // 
+            comboBoxPlayer.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxPlayer.FormattingEnabled = true;
             comboBoxPlayer.Location = new Point(12, 36);
             comboBoxPlayer.Name = "comboBoxPlayer";
@@ -193,6 +254,7 @@
             // 
             // comboBoxTransferType
             // 
+            comboBoxTransferType.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxTransferType.FormattingEnabled = true;
             comboBoxTransferType.Location = new Point(12, 104);
             comboBoxTransferType.Name = "comboBoxTransferType";
@@ -228,6 +290,7 @@
             // 
             // comboBoxFilterByPlayer
             // 
+            comboBoxFilterByPlayer.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxFilterByPlayer.FormattingEnabled = true;
             comboBoxFilterByPlayer.Location = new Point(12, 590);
             comboBoxFilterByPlayer.Name = "comboBoxFilterByPlayer";
@@ -246,6 +309,7 @@
             // 
             // comboBoxFilterByClubFrom
             // 
+            comboBoxFilterByClubFrom.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxFilterByClubFrom.FormattingEnabled = true;
             comboBoxFilterByClubFrom.Location = new Point(188, 548);
             comboBoxFilterByClubFrom.Name = "comboBoxFilterByClubFrom";
@@ -264,6 +328,7 @@
             // 
             // comboBoxFilterByClubTo
             // 
+            comboBoxFilterByClubTo.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxFilterByClubTo.FormattingEnabled = true;
             comboBoxFilterByClubTo.Location = new Point(188, 607);
             comboBoxFilterByClubTo.Name = "comboBoxFilterByClubTo";

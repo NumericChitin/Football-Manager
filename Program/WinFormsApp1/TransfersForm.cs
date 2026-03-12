@@ -34,16 +34,20 @@ namespace WinFormsApp1
 
             transferBindingSource.DataSource = _db.Transfers.Local.ToBindingList();
 
-            // Populate player comboboxes
+            // Player combobox (normal)
             comboBoxPlayer.DataSource = _db.Players.Local.ToList();
             comboBoxPlayer.DisplayMember = "FullName";
             comboBoxPlayer.ValueMember = "PlayerId";
 
-            comboBoxFilterByPlayer.DataSource = _db.Players.Local.ToList();
+            // FILTER PLAYER (add empty option)
+            var playersFilter = _db.Players.Local.ToList();
+            playersFilter.Insert(0, new Player { PlayerId = 0, FullName = "" });
+
+            comboBoxFilterByPlayer.DataSource = playersFilter;
             comboBoxFilterByPlayer.DisplayMember = "FullName";
             comboBoxFilterByPlayer.ValueMember = "PlayerId";
 
-            // Populate club comboboxes
+            // Clubs
             comboBoxClubFrom.DataSource = _db.Clubs.Local.ToList();
             comboBoxClubFrom.DisplayMember = "Name";
             comboBoxClubFrom.ValueMember = "ClubId";
@@ -52,18 +56,28 @@ namespace WinFormsApp1
             comboBoxClubTo.DisplayMember = "Name";
             comboBoxClubTo.ValueMember = "ClubId";
 
-            comboBoxFilterByClubFrom.DataSource = _db.Clubs.Local.ToList();
+            // FILTER CLUBS (add empty option)
+            var clubsFilterFrom = _db.Clubs.Local.ToList();
+            clubsFilterFrom.Insert(0, new Club { ClubId = 0, Name = "" });
+
+            comboBoxFilterByClubFrom.DataSource = clubsFilterFrom;
             comboBoxFilterByClubFrom.DisplayMember = "Name";
             comboBoxFilterByClubFrom.ValueMember = "ClubId";
 
-            comboBoxFilterByClubTo.DataSource = _db.Clubs.Local.ToList();
+            var clubsFilterTo = _db.Clubs.Local.ToList();
+            clubsFilterTo.Insert(0, new Club { ClubId = 0, Name = "" });
+
+            comboBoxFilterByClubTo.DataSource = clubsFilterTo;
             comboBoxFilterByClubTo.DisplayMember = "Name";
             comboBoxFilterByClubTo.ValueMember = "ClubId";
 
             comboBoxPlayer.SelectedIndexChanged += ComboBoxPlayer_SelectedIndexChanged;
 
-            // Transfer type options
             comboBoxTransferType.Items.AddRange(new[] { "permanent", "temporary" });
+
+            // DEFAULT FILTER DATES
+            dateTimePickerFilterByDateStart.Value = new DateTime(1753, 1, 1);
+            dateTimePickerFilterByDateEnd.Value = DateTime.Today;
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
@@ -157,8 +171,8 @@ namespace WinFormsApp1
 
         private void buttonClear_Click(object sender, EventArgs e)
         {
-            transferBindingSource.DataSource = _db.Transfers.Local.ToBindingList();
-            transferBindingSource.ResetBindings(false);
+            ResetFilters();
+            ApplyFilters();
         }
 
         private bool ValidateTransfers()
@@ -229,6 +243,57 @@ namespace WinFormsApp1
             {
                 comboBoxClubFrom.SelectedValue = player.ClubId;
             }
+        }
+
+        private void buttonFilter_Click(object sender, EventArgs e)
+        {
+            ApplyFilters();
+        }
+
+        private void ApplyFilters()
+        {
+            var query = _db.Transfers
+                .Include(t => t.Player)
+                .Include(t => t.ClubFromNavigation)
+                .Include(t => t.ClubToNavigation)
+                .AsQueryable();
+
+            // Player filter
+            if (comboBoxFilterByPlayer.SelectedValue is int playerId && playerId != 0)
+            {
+                query = query.Where(t => t.PlayerId == playerId);
+            }
+
+            // Club From filter
+            if (comboBoxFilterByClubFrom.SelectedValue is int clubFromId && clubFromId != 0)
+            {
+                query = query.Where(t => t.ClubFrom == clubFromId);
+            }
+
+            // Club To filter
+            if (comboBoxFilterByClubTo.SelectedValue is int clubToId && clubToId != 0)
+            {
+                query = query.Where(t => t.ClubTo == clubToId);
+            }
+
+            // Date filter
+            DateOnly startDate = DateOnly.FromDateTime(dateTimePickerFilterByDateStart.Value);
+            DateOnly endDate = DateOnly.FromDateTime(dateTimePickerFilterByDateEnd.Value);
+
+            query = query.Where(t => t.Date >= startDate && t.Date <= endDate);
+
+            transferBindingSource.DataSource = query.ToList();
+            transferBindingSource.ResetBindings(false);
+        }
+
+        private void ResetFilters()
+        {
+            comboBoxFilterByPlayer.SelectedIndex = 0;
+            comboBoxFilterByClubFrom.SelectedIndex = 0;
+            comboBoxFilterByClubTo.SelectedIndex = 0;
+
+            dateTimePickerFilterByDateStart.Value = new DateTime(1753, 1, 1);
+            dateTimePickerFilterByDateEnd.Value = DateTime.Today;
         }
     }
 }
