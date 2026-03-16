@@ -24,5 +24,11 @@ namespace WinFormsApp1
             TransfersForm transfersForm = new TransfersForm();
             transfersForm.ShowDialog();
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            LeaguesForm leaguesForm = new LeaguesForm();
+            leaguesForm.ShowDialog();
+        }
     }
 }
