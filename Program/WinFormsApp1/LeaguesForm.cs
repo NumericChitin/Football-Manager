@@ -17,11 +17,6 @@ namespace WinFormsApp1
         public LeaguesForm()
         {
             InitializeComponent();
-            /* TO-DO:
-             * Fix the crashes (lines 57 - 61)
-             * Find a way to define the columns of the second dgv statically
-             * uh... verify that stuff *actually* works
-            */
         }
 
         private void LeaguesForm_Load(object sender, EventArgs e)
@@ -40,7 +35,7 @@ namespace WinFormsApp1
 
             leagueBindingSource.DataSource = _leagues;
 
-            dgvParticipants.AutoGenerateColumns = true;
+            dgvParticipants.AutoGenerateColumns = false;
         }
 
         private void dgvLeagues_SelectionChanged(object sender, EventArgs e)
@@ -52,13 +47,16 @@ namespace WinFormsApp1
             tbSeason.Text = league.Season;
 
             _participants = new BindingList<Club>(league.Clubs.ToList());
-            dgvParticipants.DataSource = _participants;
 
-            //Throws exception without fail
+            clubBindingSource.DataSource = _participants;
+            dgvParticipants.DataSource = clubBindingSource;
+
+            var leagueClubIds = league.Clubs.Select(lc => lc.ClubId).ToList();
+
             var available = _context.Clubs
-                .Where(c => !league.Clubs.Any(lc => lc.ClubId == c.ClubId))
+                .Where(c => !leagueClubIds.Contains(c.ClubId))
                 .ToList();
-            //
+
             _availableClubs = new BindingList<Club>(available);
 
             cboAvailableClubs.DataSource = _availableClubs;
@@ -79,7 +77,6 @@ namespace WinFormsApp1
             };
 
             _context.Leagues.Add(league);
-            _leagues.Add(league);
         }
 
         private void buttonEditLeague_Click(object sender, EventArgs e)
@@ -101,6 +98,14 @@ namespace WinFormsApp1
             if (leagueBindingSource.Current is not League league)
                 return;
 
+            bool hasMatches = _context.Matches.Any(m => m.LeagueId == league.LeagueId);
+
+            if (hasMatches)
+            {
+                MessageBox.Show("Не може да изтриете лига с изиграни мачове.");
+                return;
+            }
+
             var confirm = MessageBox.Show(
                 "Сигурни ли сте, че искате да изтриете лигата?",
                 "Потвърждение",
@@ -109,8 +114,9 @@ namespace WinFormsApp1
             if (confirm != DialogResult.Yes)
                 return;
 
+            league.Clubs.Clear(); // remove LeagueTeams entries
+
             _context.Leagues.Remove(league);
-            _leagues.Remove(league);
         }
 
         private void buttonAddClubToLeague_Click(object sender, EventArgs e)

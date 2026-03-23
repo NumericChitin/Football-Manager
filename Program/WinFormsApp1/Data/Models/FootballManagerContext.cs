@@ -131,10 +131,10 @@ public partial class FootballManagerContext : DbContext
                     "LeagueTeam",
                     r => r.HasOne<Club>().WithMany()
                         .HasForeignKey("ClubId")
-                        .OnDelete(DeleteBehavior.ClientSetNull),
+                        .OnDelete(DeleteBehavior.Cascade),
                     l => l.HasOne<League>().WithMany()
                         .HasForeignKey("LeagueId")
-                        .OnDelete(DeleteBehavior.ClientSetNull),
+                        .OnDelete(DeleteBehavior.Cascade),
                     j =>
                     {
                         j.HasKey("LeagueId", "ClubId");
@@ -158,7 +158,7 @@ public partial class FootballManagerContext : DbContext
 
             entity.HasOne(d => d.League).WithMany(p => p.Matches)
                 .HasForeignKey(d => d.LeagueId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<Player>(entity =>

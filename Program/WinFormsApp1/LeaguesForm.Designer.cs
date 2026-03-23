@@ -48,9 +48,15 @@
             label2 = new Label();
             label3 = new Label();
             tbSeason = new TextBox();
+            clubBindingSource = new BindingSource(components);
+            ClubId = new DataGridViewTextBoxColumn();
+            ClubName = new DataGridViewTextBoxColumn();
+            ClubCity = new DataGridViewTextBoxColumn();
+            ClubStadium = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)dgvLeagues).BeginInit();
             ((System.ComponentModel.ISupportInitialize)leagueBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvParticipants).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)clubBindingSource).BeginInit();
             SuspendLayout();
             // 
             // dgvLeagues
@@ -103,10 +109,12 @@
             // dgvParticipants
             // 
             dgvParticipants.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvParticipants.Columns.AddRange(new DataGridViewColumn[] { ClubId, ClubName, ClubCity, ClubStadium });
             dgvParticipants.Location = new Point(443, 12);
             dgvParticipants.Name = "dgvParticipants";
             dgvParticipants.Size = new Size(476, 374);
             dgvParticipants.TabIndex = 1;
+            dgvParticipants.AutoGenerateColumns = false;
             // 
             // cboAvailableClubs
             // 
@@ -230,6 +238,41 @@
             tbSeason.Size = new Size(129, 32);
             tbSeason.TabIndex = 12;
             // 
+            // clubBindingSource
+            // 
+            clubBindingSource.DataSource = typeof(Data.Models.Club);
+            // 
+            // ClubId
+            // 
+            ClubId.DataPropertyName = "ClubId";
+            ClubId.HeaderText = "ID";
+            ClubId.Name = "ClubId";
+            ClubId.ReadOnly = true;
+            ClubId.Width = 50;
+            // 
+            // ClubName
+            // 
+            ClubName.DataPropertyName = "Name";
+            ClubName.HeaderText = "Име";
+            ClubName.Name = "ClubName";
+            ClubName.ReadOnly = true;
+            ClubName.Width = 150;
+            // 
+            // ClubCity
+            // 
+            ClubCity.DataPropertyName = "City";
+            ClubCity.HeaderText = "Град";
+            ClubCity.Name = "ClubCity";
+            ClubCity.ReadOnly = true;
+            // 
+            // ClubStadium
+            // 
+            ClubStadium.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            ClubStadium.DataPropertyName = "Stadium";
+            ClubStadium.HeaderText = "Стадион";
+            ClubStadium.Name = "ClubStadium";
+            ClubStadium.ReadOnly = true;
+            // 
             // LeaguesForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -255,6 +298,7 @@
             ((System.ComponentModel.ISupportInitialize)dgvLeagues).EndInit();
             ((System.ComponentModel.ISupportInitialize)leagueBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvParticipants).EndInit();
+            ((System.ComponentModel.ISupportInitialize)clubBindingSource).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -280,5 +324,10 @@
         private Label label2;
         private Label label3;
         private TextBox tbSeason;
+        private BindingSource clubBindingSource;
+        private DataGridViewTextBoxColumn ClubId;
+        private DataGridViewTextBoxColumn ClubName;
+        private DataGridViewTextBoxColumn ClubCity;
+        private DataGridViewTextBoxColumn ClubStadium;
     }
 }
