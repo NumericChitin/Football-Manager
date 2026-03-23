@@ -41,7 +41,7 @@
             button1.Name = "button1";
             button1.Size = new Size(161, 100);
             button1.TabIndex = 0;
-            button1.Text = "Open clubform";
+            button1.Text = "Отвори клубовете";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
@@ -52,7 +52,7 @@
             button2.Name = "button2";
             button2.Size = new Size(161, 100);
             button2.TabIndex = 1;
-            button2.Text = "Open playerform";
+            button2.Text = "Отвори играчите";
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
@@ -63,7 +63,7 @@
             button3.Name = "button3";
             button3.Size = new Size(161, 100);
             button3.TabIndex = 2;
-            button3.Text = "Open transfersform";
+            button3.Text = "Отвори трансферите";
             button3.UseVisualStyleBackColor = true;
             button3.Click += button3_Click;
             // 
@@ -74,7 +74,7 @@
             button4.Name = "button4";
             button4.Size = new Size(161, 100);
             button4.TabIndex = 3;
-            button4.Text = "Open leaguesform";
+            button4.Text = "Отвори лигите";
             button4.UseVisualStyleBackColor = true;
             button4.Click += button4_Click;
             // 

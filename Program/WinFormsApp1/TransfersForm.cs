@@ -73,7 +73,7 @@ namespace WinFormsApp1
 
             comboBoxPlayer.SelectedIndexChanged += ComboBoxPlayer_SelectedIndexChanged;
 
-            comboBoxTransferType.Items.AddRange(new[] { "permanent", "temporary" });
+            comboBoxTransferType.Items.AddRange(new[] { "постоянен", "временен" });
 
             // DEFAULT FILTER DATES
             dateTimePickerFilterByDateStart.Value = new DateTime(1753, 1, 1);

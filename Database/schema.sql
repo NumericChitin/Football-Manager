@@ -1,4 +1,4 @@
-CREATE DATABASE FootballManager
+﻿CREATE DATABASE FootballManager
 GO
 
 USE FootballManager
@@ -19,14 +19,15 @@ PlayerId INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
 FullName NVARCHAR(64) NOT NULL,
 DateOfBirth DATE NOT NULL,
 Nationality NVARCHAR(64) NOT NULL,
-Position NVARCHAR(32) NOT NULL,
+Position NVARCHAR(32) NOT NULL CHECK (Position = N'Нападател' OR Position = N'Полузащитник' OR 
+                                      Position = N'Защитник' OR Position = N'Вратар'),
 Number INT NOT NULL,
-DominantFoot NVARCHAR(16) NOT NULL CHECK(DominantFoot = N'left' OR DominantFoot = N'right'),
+DominantFoot NVARCHAR(16) NOT NULL CHECK(DominantFoot = N'ляв' OR DominantFoot = N'десен'),
 ClubId INT NOT NULL,
 DateOfContract DATE NOT NULL,
 Salary FLOAT NOT NULL,
-Status NVARCHAR(16) NOT NULL CHECK (Status = N'active' OR Status = N'hurt' OR
-									Status = N'punished' OR Status = N'free agent')
+Status NVARCHAR(16) NOT NULL CHECK (Status = N'активен' OR Status = N'ранен' OR
+									Status = N'наказан' OR Status = N'свободен агент')
 CONSTRAINT FK_Players_Clubs_ClubId FOREIGN KEY(ClubID) REFERENCES Clubs(ClubId)
 )
 GO
@@ -57,7 +58,7 @@ PlayerId INT NOT NULL,
 ClubFrom INT NOT NULL,
 ClubTo INT NOT NULL,
 Date DATE NOT NULL,
-Type NVARCHAR(16) NOT NULL CHECK (Type = N'permanent' OR Type = N'temporary'),
+Type NVARCHAR(16) NOT NULL CHECK (Type = N'постоянен' OR Type = N'временен'),
 Comment NVARCHAR(255),
 CONSTRAINT FK_Transfers_Players_PlayerId FOREIGN KEY (PlayerId) REFERENCES Players(PlayerId),
 CONSTRAINT FK_Transfers_Clubs_ClubFrom FOREIGN KEY (ClubFrom) REFERENCES Clubs(ClubId),
@@ -100,7 +101,7 @@ GO
 --8 cards
 CREATE TABLE Cards (
 CardId INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
-Type NVARCHAR(16) NOT NULL CHECK (Type = N'yellow' OR Type = N'red'),
+Type NVARCHAR(16) NOT NULL CHECK (Type = N'жълт' OR Type = N'червен'),
 Minute INT NOT NULL CHECK (Minute >= 1 AND Minute <= 120),
 PlayerId INT NOT NULL,
 ClubId INT NULL,
@@ -130,7 +131,7 @@ GO
 CREATE TABLE Users (
 UserId INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
 UserName NVARCHAR(32) UNIQUE NOT NULL,
-Type NVARCHAR(16) NOT NULL CHECK(Type = N'Admin' OR Type = N'referee' OR Type = N'User'),
+Type NVARCHAR(16) NOT NULL CHECK(Type = N'Администратор' OR Type = N'Рефер' OR Type = N'Обикновен потребител'),
 Password NVARCHAR(32) NOT NULL
 )
 GO

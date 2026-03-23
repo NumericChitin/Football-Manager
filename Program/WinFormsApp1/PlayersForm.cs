@@ -34,9 +34,9 @@ namespace WinFormsApp1
             playerBindingSource.DataSource = _db.Players.Local.ToBindingList();
 
             // Populate comboboxes
-            comboBoxDominantFoot.Items.AddRange(new[] { "left", "right" });
-            comboBoxStatus.Items.AddRange(new[] { "active", "hurt", "punished", "free agent" });
-            comboBoxPosition.Items.AddRange(new[] { "Forward", "Midfielder", "Defender", "GoalKeeper" });
+            comboBoxDominantFoot.Items.AddRange(new[] { "ляв", "десен" });
+            comboBoxStatus.Items.AddRange(new[] { "активен", "ранен", "наказан", "свободен агент" });
+            comboBoxPosition.Items.AddRange(new[] { "Нападател", "Полузащитник", "Защитник", "Вратар" });
 
             comboBoxClubName.DataSource = _db.Clubs.Local.ToList();
             comboBoxClubName.DisplayMember = "Name";
