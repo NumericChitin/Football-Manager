@@ -260,6 +260,7 @@
             comboBoxClubName.Name = "comboBoxClubName";
             comboBoxClubName.Size = new Size(154, 23);
             comboBoxClubName.TabIndex = 35;
+            comboBoxClubName.Enabled = false;
             // 
             // dateTimePickerBirthDate
             // 
