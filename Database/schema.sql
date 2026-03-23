@@ -45,7 +45,7 @@ CREATE TABLE LeagueTeams (
 LeagueId INT NOT NULL,
 ClubId INT NOT NULL,
 CONSTRAINT PK_LeagueTeams PRIMARY KEY (LeagueId, ClubId),
-CONSTRAINT FK_LeagueTeams_Leagues_LeagueId FOREIGN KEY (LeagueId) REFERENCES Leagues(LeagueId),
+CONSTRAINT FK_LeagueTeams_Leagues_LeagueId FOREIGN KEY (LeagueId) REFERENCES Leagues(LeagueId) ON DELETE CASCADE,
 CONSTRAINT FK_LeagueTeams_Clubs_ClubId FOREIGN KEY (ClubId) REFERENCES Clubs(ClubId)
 )
 GO
