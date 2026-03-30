@@ -36,6 +36,10 @@
             numberClubsDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             leagueBindingSource = new BindingSource(components);
             dgvParticipants = new DataGridView();
+            ClubId = new DataGridViewTextBoxColumn();
+            ClubName = new DataGridViewTextBoxColumn();
+            ClubCity = new DataGridViewTextBoxColumn();
+            ClubStadium = new DataGridViewTextBoxColumn();
             cboAvailableClubs = new ComboBox();
             buttonAddLeague = new Button();
             buttonEditLeague = new Button();
@@ -49,14 +53,18 @@
             label3 = new Label();
             tbSeason = new TextBox();
             clubBindingSource = new BindingSource(components);
-            ClubId = new DataGridViewTextBoxColumn();
-            ClubName = new DataGridViewTextBoxColumn();
-            ClubCity = new DataGridViewTextBoxColumn();
-            ClubStadium = new DataGridViewTextBoxColumn();
+            dgvMatches = new DataGridView();
+            buttonGenerateMatches = new Button();
+            MatchId = new DataGridViewTextBoxColumn();
+            HomeClubName = new DataGridViewTextBoxColumn();
+            AwayClubName = new DataGridViewTextBoxColumn();
+            Date = new DataGridViewTextBoxColumn();
+            Round = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)dgvLeagues).BeginInit();
             ((System.ComponentModel.ISupportInitialize)leagueBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvParticipants).BeginInit();
             ((System.ComponentModel.ISupportInitialize)clubBindingSource).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvMatches).BeginInit();
             SuspendLayout();
             // 
             // dgvLeagues
@@ -115,6 +123,37 @@
             dgvParticipants.Size = new Size(476, 374);
             dgvParticipants.TabIndex = 1;
             dgvParticipants.AutoGenerateColumns = false;
+            // 
+            // ClubId
+            // 
+            ClubId.DataPropertyName = "ClubId";
+            ClubId.HeaderText = "ID";
+            ClubId.Name = "ClubId";
+            ClubId.ReadOnly = true;
+            ClubId.Width = 50;
+            // 
+            // ClubName
+            // 
+            ClubName.DataPropertyName = "Name";
+            ClubName.HeaderText = "Име";
+            ClubName.Name = "ClubName";
+            ClubName.ReadOnly = true;
+            ClubName.Width = 150;
+            // 
+            // ClubCity
+            // 
+            ClubCity.DataPropertyName = "City";
+            ClubCity.HeaderText = "Град";
+            ClubCity.Name = "ClubCity";
+            ClubCity.ReadOnly = true;
+            // 
+            // ClubStadium
+            // 
+            ClubStadium.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            ClubStadium.DataPropertyName = "Stadium";
+            ClubStadium.HeaderText = "Стадион";
+            ClubStadium.Name = "ClubStadium";
+            ClubStadium.ReadOnly = true;
             // 
             // cboAvailableClubs
             // 
@@ -242,42 +281,68 @@
             // 
             clubBindingSource.DataSource = typeof(Data.Models.Club);
             // 
-            // ClubId
+            // dgvMatches
             // 
-            ClubId.DataPropertyName = "ClubId";
-            ClubId.HeaderText = "ID";
-            ClubId.Name = "ClubId";
-            ClubId.ReadOnly = true;
-            ClubId.Width = 50;
+            dgvMatches.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvMatches.Columns.AddRange(new DataGridViewColumn[] { MatchId, HomeClubName, AwayClubName, Date, Round });
+            dgvMatches.Location = new Point(925, 12);
+            dgvMatches.Name = "dgvMatches";
+            dgvMatches.Size = new Size(501, 531);
+            dgvMatches.TabIndex = 14;
+            dgvMatches.AutoGenerateColumns = false;
             // 
-            // ClubName
+            // buttonGenerateMatches
             // 
-            ClubName.DataPropertyName = "Name";
-            ClubName.HeaderText = "Име";
-            ClubName.Name = "ClubName";
-            ClubName.ReadOnly = true;
-            ClubName.Width = 150;
+            buttonGenerateMatches.Font = new Font("Segoe UI", 14F);
+            buttonGenerateMatches.Location = new Point(1112, 549);
+            buttonGenerateMatches.Name = "buttonGenerateMatches";
+            buttonGenerateMatches.Size = new Size(129, 60);
+            buttonGenerateMatches.TabIndex = 15;
+            buttonGenerateMatches.Text = "Генерирай мачове";
+            buttonGenerateMatches.UseVisualStyleBackColor = true;
+            buttonGenerateMatches.Click += buttonGenerateMatches_Click;
             // 
-            // ClubCity
+            // MatchId
             // 
-            ClubCity.DataPropertyName = "City";
-            ClubCity.HeaderText = "Град";
-            ClubCity.Name = "ClubCity";
-            ClubCity.ReadOnly = true;
+            MatchId.DataPropertyName = "MatchId";
+            MatchId.HeaderText = "ID";
+            MatchId.Name = "MatchId";
+            MatchId.Width = 50;
             // 
-            // ClubStadium
+            // HomeClubName
             // 
-            ClubStadium.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            ClubStadium.DataPropertyName = "Stadium";
-            ClubStadium.HeaderText = "Стадион";
-            ClubStadium.Name = "ClubStadium";
-            ClubStadium.ReadOnly = true;
+            HomeClubName.DataPropertyName = "HomeClubName";
+            HomeClubName.HeaderText = "Домакин";
+            HomeClubName.Name = "HomeClubName";
+            HomeClubName.Width = 125;
+            // 
+            // AwayClubName
+            // 
+            AwayClubName.DataPropertyName = "AwayClubName";
+            AwayClubName.HeaderText = "Гост";
+            AwayClubName.Name = "AwayClubName";
+            AwayClubName.Width = 125;
+            // 
+            // Date
+            // 
+            Date.DataPropertyName = "Date";
+            Date.HeaderText = "Дата";
+            Date.Name = "Date";
+            // 
+            // Round
+            // 
+            Round.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            Round.DataPropertyName = "Round";
+            Round.HeaderText = "Рунд";
+            Round.Name = "Round";
             // 
             // LeaguesForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(931, 621);
+            ClientSize = new Size(1438, 621);
+            Controls.Add(buttonGenerateMatches);
+            Controls.Add(dgvMatches);
             Controls.Add(label3);
             Controls.Add(tbSeason);
             Controls.Add(label2);
@@ -299,6 +364,7 @@
             ((System.ComponentModel.ISupportInitialize)leagueBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvParticipants).EndInit();
             ((System.ComponentModel.ISupportInitialize)clubBindingSource).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvMatches).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -329,5 +395,12 @@
         private DataGridViewTextBoxColumn ClubName;
         private DataGridViewTextBoxColumn ClubCity;
         private DataGridViewTextBoxColumn ClubStadium;
+        private DataGridView dgvMatches;
+        private Button buttonGenerateMatches;
+        private DataGridViewTextBoxColumn MatchId;
+        private DataGridViewTextBoxColumn HomeClubName;
+        private DataGridViewTextBoxColumn AwayClubName;
+        private DataGridViewTextBoxColumn Date;
+        private DataGridViewTextBoxColumn Round;
     }
 }

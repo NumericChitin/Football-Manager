@@ -13,6 +13,7 @@ namespace WinFormsApp1
         private BindingList<League> _leagues;
         private BindingList<Club> _participants;
         private BindingList<Club> _availableClubs;
+        private BindingList<Match> _matches;
 
         public LeaguesForm()
         {
@@ -36,32 +37,25 @@ namespace WinFormsApp1
             leagueBindingSource.DataSource = _leagues;
 
             dgvParticipants.AutoGenerateColumns = false;
+            dgvMatches.AutoGenerateColumns = false;
+
+            _context.Matches
+            .Include(m => m.HomeClub)
+            .Include(m => m.AwayClub)
+            .Load();
+
+            if (_leagues.Count > 0)
+            {
+                LoadLeagueDetails(_leagues[0]);
+            }
         }
 
         private void dgvLeagues_SelectionChanged(object sender, EventArgs e)
         {
-            if (leagueBindingSource.Current is not League league)
-                return;
-
-            tbLeagueName.Text = league.Name;
-            tbSeason.Text = league.Season;
-
-            _participants = new BindingList<Club>(league.Clubs.ToList());
-
-            clubBindingSource.DataSource = _participants;
-            dgvParticipants.DataSource = clubBindingSource;
-
-            var leagueClubIds = league.Clubs.Select(lc => lc.ClubId).ToList();
-
-            var available = _context.Clubs
-                .Where(c => !leagueClubIds.Contains(c.ClubId))
-                .ToList();
-
-            _availableClubs = new BindingList<Club>(available);
-
-            cboAvailableClubs.DataSource = _availableClubs;
-            cboAvailableClubs.DisplayMember = "Name";
-            cboAvailableClubs.ValueMember = "ClubId";
+            if (leagueBindingSource.Current is League league)
+            {
+                LoadLeagueDetails(league);
+            }
         }
 
         private void buttonAddLeague_Click(object sender, EventArgs e)
@@ -195,10 +189,12 @@ namespace WinFormsApp1
                 return false;
             }
 
+            int currentLeagueId = (leagueBindingSource.Current as League)?.LeagueId ?? 0;
+
             bool exists = _context.Leagues.Any(l =>
                 l.Name == name &&
                 l.Season == season &&
-                l.LeagueId != (leagueBindingSource.Current as League).LeagueId);
+                l.LeagueId != currentLeagueId);
 
             if (exists)
             {
@@ -222,6 +218,96 @@ namespace WinFormsApp1
                 (m.HomeClubId == club.ClubId || m.AwayClubId == club.ClubId));
 
             return !hasMatches;
+        }
+
+        private void GenerateMatches()
+        {
+            if (leagueBindingSource.Current is not League league)
+                return;
+
+            bool hasMatches = _context.Matches
+            .Any(m => m.LeagueId == league.LeagueId);
+
+            if (hasMatches)
+            {
+                MessageBox.Show("Мачовете за тази лига вече са генерирани.");
+                return;
+            }
+
+            var clubs = league.Clubs.ToList();
+
+            for (int i = 0; i < clubs.Count; i++)
+            {
+                for (int j = i + 1; j < clubs.Count; j++)
+                {
+                    var clubA = clubs[i];
+                    var clubB = clubs[j];
+
+                    // Match 1
+                    _context.Matches.Add(new Match
+                    {
+                        LeagueId = league.LeagueId,
+                        HomeClubId = clubA.ClubId,
+                        AwayClubId = clubB.ClubId,
+                        Round = 1
+                    });
+
+                    // Match 2 (reverse)
+                    _context.Matches.Add(new Match
+                    {
+                        LeagueId = league.LeagueId,
+                        HomeClubId = clubB.ClubId,
+                        AwayClubId = clubA.ClubId,
+                        Round = 2
+                    });
+                }
+            }
+
+            MessageBox.Show("Мачовете (домакин/гост) са генерирани.");
+        }
+
+        private void buttonGenerateMatches_Click(object sender, EventArgs e)
+        {
+            if (leagueBindingSource.Current is not League league)
+                return;
+
+            if (league.Clubs.Count < 2)
+            {
+                MessageBox.Show("Лигата трябва да има поне 2 клуба.");
+                return;
+            }
+
+            GenerateMatches();
+        }
+
+        private void LoadLeagueDetails(League league)
+        {
+            tbLeagueName.Text = league.Name;
+            tbSeason.Text = league.Season;
+
+            _participants = new BindingList<Club>(league.Clubs.ToList());
+            clubBindingSource.DataSource = _participants;
+            dgvParticipants.DataSource = clubBindingSource;
+
+            var leagueClubIds = league.Clubs.Select(lc => lc.ClubId).ToList();
+
+            var available = _context.Clubs
+                .Where(c => !leagueClubIds.Contains(c.ClubId))
+                .ToList();
+
+            _availableClubs = new BindingList<Club>(available);
+
+            cboAvailableClubs.DataSource = _availableClubs;
+            cboAvailableClubs.DisplayMember = "Name";
+            cboAvailableClubs.ValueMember = "ClubId";
+
+            _matches = new BindingList<Match>(
+                _context.Matches.Local
+                    .Where(m => m.LeagueId == league.LeagueId)
+                    .ToList()
+            );
+
+            dgvMatches.DataSource = _matches;
         }
     }
 }

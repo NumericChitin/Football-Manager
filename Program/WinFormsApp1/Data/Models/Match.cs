@@ -28,4 +28,8 @@ public partial class Match
     public virtual Club HomeClub { get; set; } = null!;
 
     public virtual League League { get; set; } = null!;
+
+    public string HomeClubName => HomeClub?.Name;
+
+    public string AwayClubName => AwayClub?.Name;
 }
