@@ -30,5 +30,11 @@ namespace WinFormsApp1
             LeaguesForm leaguesForm = new LeaguesForm();
             leaguesForm.ShowDialog();
         }
+
+        private void buttonOpenMatches_Click(object sender, EventArgs e)
+        {
+            MatchesForm matchesForm = new MatchesForm();
+            matchesForm.ShowDialog();
+        }
     }
 }

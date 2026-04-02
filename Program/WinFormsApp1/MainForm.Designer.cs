@@ -32,6 +32,7 @@
             button2 = new Button();
             button3 = new Button();
             button4 = new Button();
+            buttonOpenMatches = new Button();
             SuspendLayout();
             // 
             // button1
@@ -78,11 +79,23 @@
             button4.UseVisualStyleBackColor = true;
             button4.Click += button4_Click;
             // 
+            // buttonOpenMatches
+            // 
+            buttonOpenMatches.Location = new Point(54, 56);
+            buttonOpenMatches.Margin = new Padding(3, 2, 3, 2);
+            buttonOpenMatches.Name = "buttonOpenMatches";
+            buttonOpenMatches.Size = new Size(161, 100);
+            buttonOpenMatches.TabIndex = 4;
+            buttonOpenMatches.Text = "Отвори мачовете";
+            buttonOpenMatches.UseVisualStyleBackColor = true;
+            buttonOpenMatches.Click += buttonOpenMatches_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(700, 338);
+            Controls.Add(buttonOpenMatches);
             Controls.Add(button4);
             Controls.Add(button3);
             Controls.Add(button2);
@@ -99,5 +112,6 @@
         private Button button2;
         private Button button3;
         private Button button4;
+        private Button buttonOpenMatches;
     }
 }

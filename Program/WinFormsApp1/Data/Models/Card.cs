@@ -22,4 +22,8 @@ public partial class Card
     public virtual Match Match { get; set; } = null!;
 
     public virtual Player Player { get; set; } = null!;
+
+    public string ClubName => Club.Name ?? "";
+
+    public string PlayerName => Player.FullName ?? "";
 }
