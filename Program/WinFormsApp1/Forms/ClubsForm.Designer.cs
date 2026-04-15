@@ -1,4 +1,5 @@
-﻿namespace WinFormsApp1
+﻿
+namespace WinFormsApp1
 {
     partial class ClubsForm
     {
@@ -51,10 +52,9 @@
             // buttonAdd
             // 
             buttonAdd.Font = new Font("Segoe UI", 12F);
-            buttonAdd.Location = new Point(10, 270);
-            buttonAdd.Margin = new Padding(3, 2, 3, 2);
+            buttonAdd.Location = new Point(11, 360);
             buttonAdd.Name = "buttonAdd";
-            buttonAdd.Size = new Size(112, 50);
+            buttonAdd.Size = new Size(128, 67);
             buttonAdd.TabIndex = 0;
             buttonAdd.Text = "Добави";
             buttonAdd.UseVisualStyleBackColor = true;
@@ -66,11 +66,10 @@
             dataGridViewClubs.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewClubs.Columns.AddRange(new DataGridViewColumn[] { clubIdDataGridViewTextBoxColumn, nameDataGridViewTextBoxColumn, cityDataGridViewTextBoxColumn, stadiumDataGridViewTextBoxColumn });
             dataGridViewClubs.DataSource = clubBindingSource;
-            dataGridViewClubs.Location = new Point(10, 75);
-            dataGridViewClubs.Margin = new Padding(3, 2, 3, 2);
+            dataGridViewClubs.Location = new Point(11, 100);
             dataGridViewClubs.Name = "dataGridViewClubs";
             dataGridViewClubs.RowHeadersWidth = 51;
-            dataGridViewClubs.Size = new Size(629, 184);
+            dataGridViewClubs.Size = new Size(719, 245);
             dataGridViewClubs.TabIndex = 1;
             // 
             // clubIdDataGridViewTextBoxColumn
@@ -116,10 +115,9 @@
             // buttonSave
             // 
             buttonSave.Font = new Font("Segoe UI", 12F);
-            buttonSave.Location = new Point(279, 271);
-            buttonSave.Margin = new Padding(3, 2, 3, 2);
+            buttonSave.Location = new Point(319, 361);
             buttonSave.Name = "buttonSave";
-            buttonSave.Size = new Size(112, 50);
+            buttonSave.Size = new Size(128, 67);
             buttonSave.TabIndex = 2;
             buttonSave.Text = "Запази промените";
             buttonSave.UseVisualStyleBackColor = true;
@@ -128,10 +126,9 @@
             // buttonDelete
             // 
             buttonDelete.Font = new Font("Segoe UI", 12F);
-            buttonDelete.Location = new Point(527, 270);
-            buttonDelete.Margin = new Padding(3, 2, 3, 2);
+            buttonDelete.Location = new Point(602, 360);
             buttonDelete.Name = "buttonDelete";
-            buttonDelete.Size = new Size(112, 50);
+            buttonDelete.Size = new Size(128, 67);
             buttonDelete.TabIndex = 3;
             buttonDelete.Text = "Изтрий";
             buttonDelete.UseVisualStyleBackColor = true;
@@ -139,32 +136,35 @@
             // 
             // textBoxName
             // 
-            textBoxName.Location = new Point(12, 35);
+            textBoxName.Location = new Point(14, 47);
+            textBoxName.Margin = new Padding(3, 4, 3, 4);
             textBoxName.Name = "textBoxName";
-            textBoxName.Size = new Size(154, 23);
+            textBoxName.Size = new Size(175, 27);
             textBoxName.TabIndex = 4;
             // 
             // textBoxCity
             // 
-            textBoxCity.Location = new Point(248, 35);
+            textBoxCity.Location = new Point(283, 47);
+            textBoxCity.Margin = new Padding(3, 4, 3, 4);
             textBoxCity.Name = "textBoxCity";
-            textBoxCity.Size = new Size(154, 23);
+            textBoxCity.Size = new Size(175, 27);
             textBoxCity.TabIndex = 5;
             // 
             // textBoxStadium
             // 
-            textBoxStadium.Location = new Point(484, 35);
+            textBoxStadium.Location = new Point(553, 47);
+            textBoxStadium.Margin = new Padding(3, 4, 3, 4);
             textBoxStadium.Name = "textBoxStadium";
-            textBoxStadium.Size = new Size(154, 23);
+            textBoxStadium.Size = new Size(175, 27);
             textBoxStadium.TabIndex = 6;
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 14F);
-            label1.Location = new Point(12, 8);
+            label1.Location = new Point(14, 11);
             label1.Name = "label1";
-            label1.Size = new Size(123, 25);
+            label1.Size = new Size(158, 32);
             label1.TabIndex = 7;
             label1.Text = "Име на клуб:";
             // 
@@ -172,9 +172,9 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 14F);
-            label2.Location = new Point(248, 8);
+            label2.Location = new Point(283, 11);
             label2.Name = "label2";
-            label2.Size = new Size(122, 25);
+            label2.Size = new Size(155, 32);
             label2.TabIndex = 8;
             label2.Text = "Име на град:";
             // 
@@ -182,17 +182,17 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 14F);
-            label3.Location = new Point(484, 8);
+            label3.Location = new Point(553, 11);
             label3.Name = "label3";
-            label3.Size = new Size(154, 25);
+            label3.Size = new Size(195, 32);
             label3.TabIndex = 9;
             label3.Text = "Име на стадион:";
             // 
             // ClubsForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(650, 330);
+            ClientSize = new Size(743, 440);
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
@@ -203,9 +203,9 @@
             Controls.Add(buttonSave);
             Controls.Add(dataGridViewClubs);
             Controls.Add(buttonAdd);
-            Margin = new Padding(3, 2, 3, 2);
             Name = "ClubsForm";
             Text = "ClubsForm";
+            FormClosing += ClubsForm_FormClosing;
             Load += ClubsForm_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridViewClubs).EndInit();
             ((System.ComponentModel.ISupportInitialize)clubBindingSource).EndInit();

@@ -11,12 +11,13 @@ using System.Windows.Forms;
 using WinFormsApp1.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using WinFormsApp1.Logic;
 
 namespace WinFormsApp1
 {
     public partial class ClubsForm : Form
     {
-        private FootballManagerContext _db;
+        private readonly ClubOperation Op = new ClubOperation();
 
         public ClubsForm()
         {
@@ -25,42 +26,36 @@ namespace WinFormsApp1
 
         private void ClubsForm_Load(object sender, EventArgs e)
         {
-            string connString = Program.Configuration.GetConnectionString("FootballManagerDb");
+            clubBindingSource.DataSource = Op.GetBindingList();
 
-            _db = new FootballManagerContext(connString);
-            _db.Clubs.Load();
-            clubBindingSource.DataSource = _db.Clubs.Local.ToBindingList();
-            dataGridViewClubs.SelectionChanged += (s, ev) => LoadSelectedClubToTextBoxes();
+            // Bind textboxes directly
+            textBoxName.DataBindings.Add("Text", clubBindingSource, "Name", true, DataSourceUpdateMode.OnPropertyChanged);
+            textBoxCity.DataBindings.Add("Text", clubBindingSource, "City", true, DataSourceUpdateMode.OnPropertyChanged);
+            textBoxStadium.DataBindings.Add("Text", clubBindingSource, "Stadium", true, DataSourceUpdateMode.OnPropertyChanged);
         }
 
-        protected override void OnFormClosed(FormClosedEventArgs e)
+        private void ClubsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            _db?.Dispose();
-            base.OnFormClosed(e);
+            Op.Dispose();
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            if (dataGridViewClubs.CurrentRow == null)
-                return;
-
-            var selectedClub = dataGridViewClubs.CurrentRow.DataBoundItem as Club;
+            var selectedClub = dataGridViewClubs.CurrentRow?.DataBoundItem as Club;
             if (selectedClub == null)
                 return;
 
             try
             {
-                // Validate textbox input first
-                if (!ValidateClubs())
+                // Just validate — values are already in the entity
+                if (!Op.Validate(selectedClub, out string error))
+                {
+                    MessageBox.Show(error);
                     return;
-
-                // Update entity from textboxes
-                selectedClub.Name = textBoxName.Text.Trim();
-                selectedClub.City = textBoxCity.Text.Trim();
-                selectedClub.Stadium = textBoxStadium.Text.Trim();
+                }
 
                 clubBindingSource.ResetBindings(false);
-                _db.SaveChanges();
+                Op.Save();
 
                 MessageBox.Show("Промените бяха запазени!");
             }
@@ -79,7 +74,7 @@ namespace WinFormsApp1
                 Stadium = ""
             };
 
-            _db.Clubs.Add(newClub);
+            Op.Add(newClub);
             clubBindingSource.ResetBindings(false);
 
             // Select the newly added row
@@ -90,8 +85,6 @@ namespace WinFormsApp1
                 dataGridViewClubs.Rows[rowIndex].Selected = true;
                 dataGridViewClubs.CurrentCell = dataGridViewClubs.Rows[rowIndex].Cells[0];
             }
-
-            LoadSelectedClubToTextBoxes();
         }
 
         private void buttonDelete_Click(object sender, EventArgs e)
@@ -128,8 +121,7 @@ namespace WinFormsApp1
                 // Remove from EF context (only if it has a valid ID)
                 if (selectedClub.ClubId != 0)
                 {
-                    _db.Clubs.Remove(selectedClub);
-                    _db.SaveChanges();
+                    Op.Remove(selectedClub);
                 }
             }
             catch (Exception ex)
@@ -142,51 +134,6 @@ namespace WinFormsApp1
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
-        }
-
-
-        private bool ValidateClubs()
-        {
-            string name = textBoxName.Text.Trim();
-            string city = textBoxCity.Text.Trim();
-            string stadium = textBoxStadium.Text.Trim();
-
-            if (string.IsNullOrWhiteSpace(name) ||
-                string.IsNullOrWhiteSpace(city) ||
-                string.IsNullOrWhiteSpace(stadium))
-            {
-                MessageBox.Show("Име, град и стадион са задължителни!");
-                return false;
-            }
-
-            // Duplicate name check (excluding current entity)
-            var selectedClub = dataGridViewClubs.CurrentRow?.DataBoundItem as Club;
-
-            bool duplicateExists = _db.Clubs.Local
-                .Any(c => c != selectedClub &&
-                          c.Name.ToLower().Trim() == name.ToLower());
-
-            if (duplicateExists)
-            {
-                MessageBox.Show("Има клуб със същото име!");
-                return false;
-            }
-
-            return true;
-        }
-
-        private void LoadSelectedClubToTextBoxes()
-        {
-            if (dataGridViewClubs.CurrentRow == null)
-                return;
-
-            var selectedClub = dataGridViewClubs.CurrentRow.DataBoundItem as Club;
-            if (selectedClub == null)
-                return;
-
-            textBoxName.Text = selectedClub.Name;
-            textBoxCity.Text = selectedClub.City;
-            textBoxStadium.Text = selectedClub.Stadium;
         }
     }
 }
