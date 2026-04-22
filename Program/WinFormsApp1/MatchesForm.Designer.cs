@@ -50,6 +50,10 @@
             buttonAddMatch = new Button();
             label7 = new Label();
             dgvEvents = new DataGridView();
+            EventType = new DataGridViewTextBoxColumn();
+            ClubName = new DataGridViewTextBoxColumn();
+            PlayerName = new DataGridViewTextBoxColumn();
+            Minute = new DataGridViewTextBoxColumn();
             label8 = new Label();
             label9 = new Label();
             cboEventType = new ComboBox();
@@ -58,10 +62,10 @@
             buttonSaveChangesEvents = new Button();
             buttonDeleteEvent = new Button();
             buttonAddEvent = new Button();
-            EventType = new DataGridViewTextBoxColumn();
-            ClubName = new DataGridViewTextBoxColumn();
-            PlayerName = new DataGridViewTextBoxColumn();
-            Minute = new DataGridViewTextBoxColumn();
+            label11 = new Label();
+            cboEventClub = new ComboBox();
+            label12 = new Label();
+            cboEventPlayer = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)dgvMatches).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvEvents).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownMinute).BeginInit();
@@ -71,18 +75,20 @@
             // 
             cboLeague.Font = new Font("Segoe UI", 14F);
             cboLeague.FormattingEnabled = true;
-            cboLeague.Location = new Point(12, 37);
+            cboLeague.Location = new Point(14, 49);
+            cboLeague.Margin = new Padding(3, 4, 3, 4);
             cboLeague.Name = "cboLeague";
-            cboLeague.Size = new Size(150, 33);
+            cboLeague.Size = new Size(171, 39);
             cboLeague.TabIndex = 0;
+            cboLeague.SelectedIndexChanged += cboLeague_SelectedIndexChanged;
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 14F);
-            label1.Location = new Point(12, 9);
+            label1.Location = new Point(14, 12);
             label1.Name = "label1";
-            label1.Size = new Size(140, 25);
+            label1.Size = new Size(178, 32);
             label1.TabIndex = 1;
             label1.Text = "Избор на лига:";
             // 
@@ -90,15 +96,19 @@
             // 
             dgvMatches.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvMatches.Columns.AddRange(new DataGridViewColumn[] { MatchId, HomeClubName, AwayClubName, Date, Round });
-            dgvMatches.Location = new Point(12, 103);
+            dgvMatches.Location = new Point(14, 137);
+            dgvMatches.Margin = new Padding(3, 4, 3, 4);
             dgvMatches.Name = "dgvMatches";
-            dgvMatches.Size = new Size(618, 245);
+            dgvMatches.RowHeadersWidth = 51;
+            dgvMatches.Size = new Size(706, 327);
             dgvMatches.TabIndex = 5;
+            dgvMatches.SelectionChanged += dgvMatches_SelectionChanged;
             // 
             // MatchId
             // 
             MatchId.DataPropertyName = "MatchId";
             MatchId.HeaderText = "ID";
+            MatchId.MinimumWidth = 6;
             MatchId.Name = "MatchId";
             MatchId.ReadOnly = true;
             MatchId.Width = 50;
@@ -107,6 +117,7 @@
             // 
             HomeClubName.DataPropertyName = "HomeClubName";
             HomeClubName.HeaderText = "Домакин";
+            HomeClubName.MinimumWidth = 6;
             HomeClubName.Name = "HomeClubName";
             HomeClubName.ReadOnly = true;
             HomeClubName.Width = 150;
@@ -115,6 +126,7 @@
             // 
             AwayClubName.DataPropertyName = "AwayClubName";
             AwayClubName.HeaderText = "Гост";
+            AwayClubName.MinimumWidth = 6;
             AwayClubName.Name = "AwayClubName";
             AwayClubName.ReadOnly = true;
             AwayClubName.Width = 150;
@@ -123,6 +135,7 @@
             // 
             Date.DataPropertyName = "Date";
             Date.HeaderText = "Дата";
+            Date.MinimumWidth = 6;
             Date.Name = "Date";
             Date.ReadOnly = true;
             Date.Width = 125;
@@ -132,6 +145,7 @@
             Round.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             Round.DataPropertyName = "Round";
             Round.HeaderText = "Рунд";
+            Round.MinimumWidth = 6;
             Round.Name = "Round";
             Round.ReadOnly = true;
             // 
@@ -139,9 +153,9 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 14F);
-            label2.Location = new Point(12, 75);
+            label2.Location = new Point(14, 100);
             label2.Name = "label2";
-            label2.Size = new Size(136, 25);
+            label2.Size = new Size(173, 32);
             label2.TabIndex = 6;
             label2.Text = "Избор на мач:";
             // 
@@ -149,9 +163,9 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 14F);
-            label3.Location = new Point(168, 9);
+            label3.Location = new Point(192, 12);
             label3.Name = "label3";
-            label3.Size = new Size(94, 25);
+            label3.Size = new Size(119, 32);
             label3.TabIndex = 11;
             label3.Text = "Домакин:";
             // 
@@ -160,18 +174,19 @@
             cboHomeClub.DropDownStyle = ComboBoxStyle.DropDownList;
             cboHomeClub.Font = new Font("Segoe UI", 14F);
             cboHomeClub.FormattingEnabled = true;
-            cboHomeClub.Location = new Point(168, 37);
+            cboHomeClub.Location = new Point(192, 49);
+            cboHomeClub.Margin = new Padding(3, 4, 3, 4);
             cboHomeClub.Name = "cboHomeClub";
-            cboHomeClub.Size = new Size(129, 33);
+            cboHomeClub.Size = new Size(147, 39);
             cboHomeClub.TabIndex = 10;
             // 
             // label4
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 14F);
-            label4.Location = new Point(303, 9);
+            label4.Location = new Point(346, 12);
             label4.Name = "label4";
-            label4.Size = new Size(53, 25);
+            label4.Size = new Size(65, 32);
             label4.TabIndex = 13;
             label4.Text = "Гост:";
             // 
@@ -180,25 +195,27 @@
             cboAwayClub.DropDownStyle = ComboBoxStyle.DropDownList;
             cboAwayClub.Font = new Font("Segoe UI", 14F);
             cboAwayClub.FormattingEnabled = true;
-            cboAwayClub.Location = new Point(303, 37);
+            cboAwayClub.Location = new Point(346, 49);
+            cboAwayClub.Margin = new Padding(3, 4, 3, 4);
             cboAwayClub.Name = "cboAwayClub";
-            cboAwayClub.Size = new Size(129, 33);
+            cboAwayClub.Size = new Size(147, 39);
             cboAwayClub.TabIndex = 12;
             // 
             // dtpMatchDate
             // 
-            dtpMatchDate.Location = new Point(573, 47);
+            dtpMatchDate.Location = new Point(655, 63);
+            dtpMatchDate.Margin = new Padding(3, 4, 3, 4);
             dtpMatchDate.Name = "dtpMatchDate";
-            dtpMatchDate.Size = new Size(200, 23);
+            dtpMatchDate.Size = new Size(228, 27);
             dtpMatchDate.TabIndex = 14;
             // 
             // label5
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 14F);
-            label5.Location = new Point(438, 9);
+            label5.Location = new Point(501, 12);
             label5.Name = "label5";
-            label5.Size = new Size(57, 25);
+            label5.Size = new Size(71, 32);
             label5.TabIndex = 16;
             label5.Text = "Рунд:";
             // 
@@ -208,27 +225,29 @@
             cboRound.Font = new Font("Segoe UI", 14F);
             cboRound.FormattingEnabled = true;
             cboRound.Items.AddRange(new object[] { "1", "2" });
-            cboRound.Location = new Point(438, 37);
+            cboRound.Location = new Point(501, 49);
+            cboRound.Margin = new Padding(3, 4, 3, 4);
             cboRound.Name = "cboRound";
-            cboRound.Size = new Size(129, 33);
+            cboRound.Size = new Size(147, 39);
             cboRound.TabIndex = 15;
             // 
             // label6
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 14F);
-            label6.Location = new Point(573, 9);
+            label6.Location = new Point(655, 12);
             label6.Name = "label6";
-            label6.Size = new Size(57, 25);
+            label6.Size = new Size(70, 32);
             label6.TabIndex = 17;
             label6.Text = "Дата:";
             // 
             // buttonSaveChanges
             // 
             buttonSaveChanges.Font = new Font("Segoe UI", 14F);
-            buttonSaveChanges.Location = new Point(644, 198);
+            buttonSaveChanges.Location = new Point(736, 264);
+            buttonSaveChanges.Margin = new Padding(3, 4, 3, 4);
             buttonSaveChanges.Name = "buttonSaveChanges";
-            buttonSaveChanges.Size = new Size(129, 60);
+            buttonSaveChanges.Size = new Size(147, 80);
             buttonSaveChanges.TabIndex = 20;
             buttonSaveChanges.Text = "Запази промените";
             buttonSaveChanges.UseVisualStyleBackColor = true;
@@ -237,9 +256,10 @@
             // buttonDeleteMatch
             // 
             buttonDeleteMatch.Font = new Font("Segoe UI", 14F);
-            buttonDeleteMatch.Location = new Point(644, 288);
+            buttonDeleteMatch.Location = new Point(736, 384);
+            buttonDeleteMatch.Margin = new Padding(3, 4, 3, 4);
             buttonDeleteMatch.Name = "buttonDeleteMatch";
-            buttonDeleteMatch.Size = new Size(129, 60);
+            buttonDeleteMatch.Size = new Size(147, 80);
             buttonDeleteMatch.TabIndex = 19;
             buttonDeleteMatch.Text = "Изтрий мач";
             buttonDeleteMatch.UseVisualStyleBackColor = true;
@@ -248,9 +268,10 @@
             // buttonAddMatch
             // 
             buttonAddMatch.Font = new Font("Segoe UI", 14F);
-            buttonAddMatch.Location = new Point(644, 102);
+            buttonAddMatch.Location = new Point(736, 136);
+            buttonAddMatch.Margin = new Padding(3, 4, 3, 4);
             buttonAddMatch.Name = "buttonAddMatch";
-            buttonAddMatch.Size = new Size(129, 60);
+            buttonAddMatch.Size = new Size(147, 80);
             buttonAddMatch.TabIndex = 18;
             buttonAddMatch.Text = "Добави мач";
             buttonAddMatch.UseVisualStyleBackColor = true;
@@ -259,107 +280,26 @@
             // label7
             // 
             label7.BackColor = SystemColors.ControlDark;
-            label7.Location = new Point(17, 360);
+            label7.Location = new Point(19, 480);
             label7.Name = "label7";
-            label7.Size = new Size(750, 1);
+            label7.Size = new Size(857, 1);
             label7.TabIndex = 21;
             // 
             // dgvEvents
             // 
             dgvEvents.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvEvents.Columns.AddRange(new DataGridViewColumn[] { EventType, ClubName, PlayerName, Minute });
-            dgvEvents.Location = new Point(12, 395);
+            dgvEvents.Location = new Point(14, 527);
+            dgvEvents.Margin = new Padding(3, 4, 3, 4);
             dgvEvents.Name = "dgvEvents";
-            dgvEvents.Size = new Size(618, 188);
+            dgvEvents.RowHeadersWidth = 51;
+            dgvEvents.Size = new Size(706, 312);
             dgvEvents.TabIndex = 22;
-            // 
-            // label8
-            // 
-            label8.AutoSize = true;
-            label8.Font = new Font("Segoe UI", 14F);
-            label8.Location = new Point(12, 367);
-            label8.Name = "label8";
-            label8.Size = new Size(90, 25);
-            label8.TabIndex = 23;
-            label8.Text = "Събития:";
-            // 
-            // label9
-            // 
-            label9.AutoSize = true;
-            label9.Font = new Font("Segoe UI", 14F);
-            label9.Location = new Point(644, 395);
-            label9.Name = "label9";
-            label9.Size = new Size(124, 25);
-            label9.TabIndex = 25;
-            label9.Text = "Тип събитие:";
-            // 
-            // cboEventType
-            // 
-            cboEventType.Font = new Font("Segoe UI", 14F);
-            cboEventType.FormattingEnabled = true;
-            cboEventType.Items.AddRange(new object[] { "Гол", "Жълт картон", "Червен картон", "Фал" });
-            cboEventType.Location = new Point(644, 423);
-            cboEventType.Name = "cboEventType";
-            cboEventType.Size = new Size(129, 33);
-            cboEventType.TabIndex = 24;
-            // 
-            // label10
-            // 
-            label10.AutoSize = true;
-            label10.Font = new Font("Segoe UI", 14F);
-            label10.Location = new Point(644, 523);
-            label10.Name = "label10";
-            label10.Size = new Size(82, 25);
-            label10.TabIndex = 27;
-            label10.Text = "Минута:";
-            // 
-            // numericUpDownMinute
-            // 
-            numericUpDownMinute.Font = new Font("Segoe UI", 14F);
-            numericUpDownMinute.Location = new Point(644, 551);
-            numericUpDownMinute.Maximum = new decimal(new int[] { 120, 0, 0, 0 });
-            numericUpDownMinute.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            numericUpDownMinute.Name = "numericUpDownMinute";
-            numericUpDownMinute.Size = new Size(129, 32);
-            numericUpDownMinute.TabIndex = 28;
-            numericUpDownMinute.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            // 
-            // buttonSaveChangesEvents
-            // 
-            buttonSaveChangesEvents.Font = new Font("Segoe UI", 14F);
-            buttonSaveChangesEvents.Location = new Point(259, 589);
-            buttonSaveChangesEvents.Name = "buttonSaveChangesEvents";
-            buttonSaveChangesEvents.Size = new Size(129, 60);
-            buttonSaveChangesEvents.TabIndex = 31;
-            buttonSaveChangesEvents.Text = "Запази промените";
-            buttonSaveChangesEvents.UseVisualStyleBackColor = true;
-            buttonSaveChangesEvents.Click += buttonSaveChangesEvents_Click;
-            // 
-            // buttonDeleteEvent
-            // 
-            buttonDeleteEvent.Font = new Font("Segoe UI", 14F);
-            buttonDeleteEvent.Location = new Point(501, 589);
-            buttonDeleteEvent.Name = "buttonDeleteEvent";
-            buttonDeleteEvent.Size = new Size(129, 60);
-            buttonDeleteEvent.TabIndex = 30;
-            buttonDeleteEvent.Text = "Изтрий събитие";
-            buttonDeleteEvent.UseVisualStyleBackColor = true;
-            buttonDeleteEvent.Click += buttonDeleteEvent_Click;
-            // 
-            // buttonAddEvent
-            // 
-            buttonAddEvent.Font = new Font("Segoe UI", 14F);
-            buttonAddEvent.Location = new Point(12, 589);
-            buttonAddEvent.Name = "buttonAddEvent";
-            buttonAddEvent.Size = new Size(129, 60);
-            buttonAddEvent.TabIndex = 29;
-            buttonAddEvent.Text = "Добави събитие";
-            buttonAddEvent.UseVisualStyleBackColor = true;
-            buttonAddEvent.Click += buttonAddEvent_Click;
             // 
             // EventType
             // 
             EventType.HeaderText = "Събитие";
+            EventType.MinimumWidth = 6;
             EventType.Name = "EventType";
             EventType.Width = 150;
             // 
@@ -367,6 +307,7 @@
             // 
             ClubName.DataPropertyName = "ClubName";
             ClubName.HeaderText = "Клуб";
+            ClubName.MinimumWidth = 6;
             ClubName.Name = "ClubName";
             ClubName.ReadOnly = true;
             ClubName.Width = 150;
@@ -375,6 +316,7 @@
             // 
             PlayerName.DataPropertyName = "PlayerName";
             PlayerName.HeaderText = "Играч";
+            PlayerName.MinimumWidth = 6;
             PlayerName.Name = "PlayerName";
             PlayerName.ReadOnly = true;
             PlayerName.Width = 150;
@@ -384,14 +326,151 @@
             Minute.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             Minute.DataPropertyName = "Minute";
             Minute.HeaderText = "Минута";
+            Minute.MinimumWidth = 6;
             Minute.Name = "Minute";
             Minute.ReadOnly = true;
             // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Font = new Font("Segoe UI", 14F);
+            label8.Location = new Point(14, 489);
+            label8.Name = "label8";
+            label8.Size = new Size(112, 32);
+            label8.TabIndex = 23;
+            label8.Text = "Събития:";
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Font = new Font("Segoe UI", 14F);
+            label9.Location = new Point(736, 525);
+            label9.Name = "label9";
+            label9.Size = new Size(157, 32);
+            label9.TabIndex = 25;
+            label9.Text = "Тип събитие:";
+            // 
+            // cboEventType
+            // 
+            cboEventType.Font = new Font("Segoe UI", 14F);
+            cboEventType.FormattingEnabled = true;
+            cboEventType.Items.AddRange(new object[] { "Гол", "Жълт картон", "Червен картон", "Фал" });
+            cboEventType.Location = new Point(736, 562);
+            cboEventType.Margin = new Padding(3, 4, 3, 4);
+            cboEventType.Name = "cboEventType";
+            cboEventType.Size = new Size(147, 39);
+            cboEventType.TabIndex = 24;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Font = new Font("Segoe UI", 14F);
+            label10.Location = new Point(736, 762);
+            label10.Name = "label10";
+            label10.Size = new Size(103, 32);
+            label10.TabIndex = 27;
+            label10.Text = "Минута:";
+            // 
+            // numericUpDownMinute
+            // 
+            numericUpDownMinute.Font = new Font("Segoe UI", 14F);
+            numericUpDownMinute.Location = new Point(736, 800);
+            numericUpDownMinute.Margin = new Padding(3, 4, 3, 4);
+            numericUpDownMinute.Maximum = new decimal(new int[] { 120, 0, 0, 0 });
+            numericUpDownMinute.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numericUpDownMinute.Name = "numericUpDownMinute";
+            numericUpDownMinute.Size = new Size(147, 39);
+            numericUpDownMinute.TabIndex = 28;
+            numericUpDownMinute.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // 
+            // buttonSaveChangesEvents
+            // 
+            buttonSaveChangesEvents.Font = new Font("Segoe UI", 14F);
+            buttonSaveChangesEvents.Location = new Point(296, 847);
+            buttonSaveChangesEvents.Margin = new Padding(3, 4, 3, 4);
+            buttonSaveChangesEvents.Name = "buttonSaveChangesEvents";
+            buttonSaveChangesEvents.Size = new Size(147, 80);
+            buttonSaveChangesEvents.TabIndex = 31;
+            buttonSaveChangesEvents.Text = "Запази промените";
+            buttonSaveChangesEvents.UseVisualStyleBackColor = true;
+            buttonSaveChangesEvents.Click += buttonSaveChangesEvents_Click;
+            // 
+            // buttonDeleteEvent
+            // 
+            buttonDeleteEvent.Font = new Font("Segoe UI", 14F);
+            buttonDeleteEvent.Location = new Point(573, 847);
+            buttonDeleteEvent.Margin = new Padding(3, 4, 3, 4);
+            buttonDeleteEvent.Name = "buttonDeleteEvent";
+            buttonDeleteEvent.Size = new Size(147, 80);
+            buttonDeleteEvent.TabIndex = 30;
+            buttonDeleteEvent.Text = "Изтрий събитие";
+            buttonDeleteEvent.UseVisualStyleBackColor = true;
+            buttonDeleteEvent.Click += buttonDeleteEvent_Click;
+            // 
+            // buttonAddEvent
+            // 
+            buttonAddEvent.Font = new Font("Segoe UI", 14F);
+            buttonAddEvent.Location = new Point(14, 847);
+            buttonAddEvent.Margin = new Padding(3, 4, 3, 4);
+            buttonAddEvent.Name = "buttonAddEvent";
+            buttonAddEvent.Size = new Size(147, 80);
+            buttonAddEvent.TabIndex = 29;
+            buttonAddEvent.Text = "Добави събитие";
+            buttonAddEvent.UseVisualStyleBackColor = true;
+            buttonAddEvent.Click += buttonAddEvent_Click;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Font = new Font("Segoe UI", 14F);
+            label11.Location = new Point(736, 606);
+            label11.Name = "label11";
+            label11.Size = new Size(72, 32);
+            label11.TabIndex = 33;
+            label11.Text = "Клуб:";
+            // 
+            // cboEventClub
+            // 
+            cboEventClub.Font = new Font("Segoe UI", 14F);
+            cboEventClub.FormattingEnabled = true;
+            cboEventClub.Items.AddRange(new object[] { "Гол", "Жълт картон", "Червен картон", "Фал" });
+            cboEventClub.Location = new Point(736, 643);
+            cboEventClub.Margin = new Padding(3, 4, 3, 4);
+            cboEventClub.Name = "cboEventClub";
+            cboEventClub.Size = new Size(147, 39);
+            cboEventClub.TabIndex = 32;
+            cboEventClub.SelectedIndexChanged += cboEventClub_SelectedIndexChanged;
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Font = new Font("Segoe UI", 14F);
+            label12.Location = new Point(736, 684);
+            label12.Name = "label12";
+            label12.Size = new Size(86, 32);
+            label12.TabIndex = 35;
+            label12.Text = "Играч:";
+            // 
+            // cboEventPlayer
+            // 
+            cboEventPlayer.Font = new Font("Segoe UI", 14F);
+            cboEventPlayer.FormattingEnabled = true;
+            cboEventPlayer.Items.AddRange(new object[] { "Гол", "Жълт картон", "Червен картон", "Фал" });
+            cboEventPlayer.Location = new Point(736, 721);
+            cboEventPlayer.Margin = new Padding(3, 4, 3, 4);
+            cboEventPlayer.Name = "cboEventPlayer";
+            cboEventPlayer.Size = new Size(147, 39);
+            cboEventPlayer.TabIndex = 34;
+            // 
             // MatchesForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(780, 654);
+            ClientSize = new Size(891, 940);
+            Controls.Add(label12);
+            Controls.Add(cboEventPlayer);
+            Controls.Add(label11);
+            Controls.Add(cboEventClub);
             Controls.Add(buttonSaveChangesEvents);
             Controls.Add(buttonDeleteEvent);
             Controls.Add(buttonAddEvent);
@@ -417,6 +496,7 @@
             Controls.Add(dgvMatches);
             Controls.Add(label1);
             Controls.Add(cboLeague);
+            Margin = new Padding(3, 4, 3, 4);
             Name = "MatchesForm";
             Text = "MatchesForm";
             Load += MatchesForm_Load;
@@ -463,5 +543,9 @@
         private DataGridViewTextBoxColumn ClubName;
         private DataGridViewTextBoxColumn PlayerName;
         private DataGridViewTextBoxColumn Minute;
+        private Label label11;
+        private ComboBox cboEventClub;
+        private Label label12;
+        private ComboBox cboEventPlayer;
     }
 }

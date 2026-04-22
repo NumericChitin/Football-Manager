@@ -5,7 +5,7 @@
     <Compile Update="Forms\ClubsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="LeaguesForm.cs">
+    <Compile Update="Forms\LeaguesForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\MainForm.cs">
