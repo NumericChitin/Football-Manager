@@ -1,14 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System.ComponentModel;
-using WinFormsApp1.Data;
+﻿using System.ComponentModel;
 using WinFormsApp1.Data.Models;
+using WinFormsApp1.Logic;
 
 namespace WinFormsApp1
 {
     public partial class LeaguesForm : Form
     {
-        private FootballManagerContext _context;
+        private LeagueOperations _leagueOps;
 
         private BindingList<League> _leagues;
         private BindingList<Club> _participants;
@@ -22,27 +20,14 @@ namespace WinFormsApp1
 
         private void LeaguesForm_Load(object sender, EventArgs e)
         {
-            string connString = Program.Configuration.GetConnectionString("FootballManagerDb");
+            // Initialize the business logic layer
+            _leagueOps = new LeagueOperations();
 
-            _context = new FootballManagerContext(connString);
-
-            _context.Leagues
-                .Include(l => l.Clubs)
-                .Load();
-
-            _context.Clubs.Load();
-
-            _leagues = _context.Leagues.Local.ToBindingList();
-
+            _leagues = _leagueOps.GetBindingList();
             leagueBindingSource.DataSource = _leagues;
 
             dgvParticipants.AutoGenerateColumns = false;
             dgvMatches.AutoGenerateColumns = false;
-
-            _context.Matches
-            .Include(m => m.HomeClub)
-            .Include(m => m.AwayClub)
-            .Load();
 
             if (_leagues.Count > 0)
             {
@@ -60,17 +45,24 @@ namespace WinFormsApp1
 
         private void buttonAddLeague_Click(object sender, EventArgs e)
         {
-            if (!ValidateLeague())
+            string name = tbLeagueName.Text.Trim();
+            string season = tbSeason.Text.Trim();
+
+            var validation = _leagueOps.ValidateLeague(name, season);
+            if (!validation.IsValid)
+            {
+                MessageBox.Show(validation.ErrorMessage);
                 return;
+            }
 
             var league = new League
             {
-                Name = tbLeagueName.Text.Trim(),
-                Season = tbSeason.Text.Trim(),
+                Name = name,
+                Season = season,
                 NumberClubs = 0
             };
 
-            _context.Leagues.Add(league);
+            _leagueOps.Add(league);
         }
 
         private void buttonEditLeague_Click(object sender, EventArgs e)
@@ -78,11 +70,18 @@ namespace WinFormsApp1
             if (leagueBindingSource.Current is not League league)
                 return;
 
-            if (!ValidateLeague())
-                return;
+            string name = tbLeagueName.Text.Trim();
+            string season = tbSeason.Text.Trim();
 
-            league.Name = tbLeagueName.Text.Trim();
-            league.Season = tbSeason.Text.Trim();
+            var validation = _leagueOps.ValidateLeague(name, season, league.LeagueId);
+            if (!validation.IsValid)
+            {
+                MessageBox.Show(validation.ErrorMessage);
+                return;
+            }
+
+            league.Name = name;
+            league.Season = season;
 
             dgvLeagues.Refresh();
         }
@@ -92,9 +91,7 @@ namespace WinFormsApp1
             if (leagueBindingSource.Current is not League league)
                 return;
 
-            bool hasMatches = _context.Matches.Any(m => m.LeagueId == league.LeagueId);
-
-            if (hasMatches)
+            if (!_leagueOps.CanDeleteLeague(league))
             {
                 MessageBox.Show("Не може да изтриете лига с изиграни мачове.");
                 return;
@@ -105,12 +102,10 @@ namespace WinFormsApp1
                 "Потвърждение",
                 MessageBoxButtons.YesNo);
 
-            if (confirm != DialogResult.Yes)
-                return;
-
-            league.Clubs.Clear(); // remove LeagueTeams entries
-
-            _context.Leagues.Remove(league);
+            if (confirm == DialogResult.Yes)
+            {
+                _leagueOps.DeleteLeague(league);
+            }
         }
 
         private void buttonAddClubToLeague_Click(object sender, EventArgs e)
@@ -121,12 +116,13 @@ namespace WinFormsApp1
             if (cboAvailableClubs.SelectedItem is not Club club)
                 return;
 
+            // Update Domain model
             league.Clubs.Add(club);
+            league.NumberClubs = league.Clubs.Count;
 
+            // Update UI BindingLists
             _participants.Add(club);
             _availableClubs.Remove(club);
-
-            league.NumberClubs = league.Clubs.Count;
         }
 
         private void buttonRemoveClubFromLeague_Click(object sender, EventArgs e)
@@ -137,7 +133,7 @@ namespace WinFormsApp1
             if (dgvParticipants.CurrentRow?.DataBoundItem is not Club club)
                 return;
 
-            if (!ValidateClubRemoval())
+            if (!_leagueOps.CanRemoveClub(league, club))
             {
                 MessageBox.Show("Не може да се изтрие клуб с изиграни мачове в лигата");
                 return;
@@ -148,22 +144,42 @@ namespace WinFormsApp1
                 "Потвърждение",
                 MessageBoxButtons.YesNo);
 
-            if (confirm != DialogResult.Yes)
+            if (confirm == DialogResult.Yes)
+            {
+                // Update Domain model
+                league.Clubs.Remove(club);
+                league.NumberClubs = league.Clubs.Count;
+
+                // Update UI BindingLists
+                _participants.Remove(club);
+                _availableClubs.Add(club);
+            }
+        }
+
+        private void buttonGenerateMatches_Click(object sender, EventArgs e)
+        {
+            if (leagueBindingSource.Current is not League league)
                 return;
 
-            league.Clubs.Remove(club);
+            var result = _leagueOps.GenerateMatches(league);
 
-            _participants.Remove(club);
-            _availableClubs.Add(club);
+            if (!result.Success)
+            {
+                MessageBox.Show(result.ErrorMessage);
+                return;
+            }
 
-            league.NumberClubs = league.Clubs.Count;
+            MessageBox.Show("Мачовете (домакин/гост) са генерирани.");
+
+            // Refresh the matches grid to show the newly generated matches
+            LoadLeagueDetails(league);
         }
 
         private void buttonSaveChanges_Click(object sender, EventArgs e)
         {
             try
             {
-                _context.SaveChanges();
+                _leagueOps.Save();
                 MessageBox.Show("Промените са записани успешно.");
             }
             catch (Exception ex)
@@ -172,142 +188,32 @@ namespace WinFormsApp1
             }
         }
 
-        private bool ValidateLeague()
-        {
-            string name = tbLeagueName.Text.Trim();
-            string season = tbSeason.Text.Trim();
-
-            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(season))
-            {
-                MessageBox.Show("Името на лигата и сезонът са задължителни.");
-                return false;
-            }
-
-            if (!System.Text.RegularExpressions.Regex.IsMatch(season, @"^\d{4}/\d{4}$"))
-            {
-                MessageBox.Show("Сезонът трябва да е във формат yyyy/yyyy.");
-                return false;
-            }
-
-            int currentLeagueId = (leagueBindingSource.Current as League)?.LeagueId ?? 0;
-
-            bool exists = _context.Leagues.Any(l =>
-                l.Name == name &&
-                l.Season == season &&
-                l.LeagueId != currentLeagueId);
-
-            if (exists)
-            {
-                MessageBox.Show("Вече съществува лига със същото име и сезон.");
-                return false;
-            }
-
-            return true;
-        }
-
-        private bool ValidateClubRemoval()
-        {
-            if (leagueBindingSource.Current is not League league)
-                return false;
-
-            if (dgvParticipants.CurrentRow?.DataBoundItem is not Club club)
-                return false;
-
-            bool hasMatches = _context.Matches.Any(m =>
-                m.LeagueId == league.LeagueId &&
-                (m.HomeClubId == club.ClubId || m.AwayClubId == club.ClubId));
-
-            return !hasMatches;
-        }
-
-        private void GenerateMatches()
-        {
-            if (leagueBindingSource.Current is not League league)
-                return;
-
-            bool hasMatches = _context.Matches
-            .Any(m => m.LeagueId == league.LeagueId);
-
-            if (hasMatches)
-            {
-                MessageBox.Show("Мачовете за тази лига вече са генерирани.");
-                return;
-            }
-
-            var clubs = league.Clubs.ToList();
-
-            for (int i = 0; i < clubs.Count; i++)
-            {
-                for (int j = i + 1; j < clubs.Count; j++)
-                {
-                    var clubA = clubs[i];
-                    var clubB = clubs[j];
-
-                    // Match 1
-                    _context.Matches.Add(new Match
-                    {
-                        LeagueId = league.LeagueId,
-                        HomeClubId = clubA.ClubId,
-                        AwayClubId = clubB.ClubId,
-                        Round = 1
-                    });
-
-                    // Match 2 (reverse)
-                    _context.Matches.Add(new Match
-                    {
-                        LeagueId = league.LeagueId,
-                        HomeClubId = clubB.ClubId,
-                        AwayClubId = clubA.ClubId,
-                        Round = 2
-                    });
-                }
-            }
-
-            MessageBox.Show("Мачовете (домакин/гост) са генерирани.");
-        }
-
-        private void buttonGenerateMatches_Click(object sender, EventArgs e)
-        {
-            if (leagueBindingSource.Current is not League league)
-                return;
-
-            if (league.Clubs.Count < 2)
-            {
-                MessageBox.Show("Лигата трябва да има поне 2 клуба.");
-                return;
-            }
-
-            GenerateMatches();
-        }
-
         private void LoadLeagueDetails(League league)
         {
             tbLeagueName.Text = league.Name;
             tbSeason.Text = league.Season;
 
+            // Load participants
             _participants = new BindingList<Club>(league.Clubs.ToList());
             clubBindingSource.DataSource = _participants;
             dgvParticipants.DataSource = clubBindingSource;
 
-            var leagueClubIds = league.Clubs.Select(lc => lc.ClubId).ToList();
-
-            var available = _context.Clubs
-                .Where(c => !leagueClubIds.Contains(c.ClubId))
-                .ToList();
-
-            _availableClubs = new BindingList<Club>(available);
-
+            // Load available clubs through Business Logic
+            _availableClubs = new BindingList<Club>(_leagueOps.GetAvailableClubs(league));
             cboAvailableClubs.DataSource = _availableClubs;
             cboAvailableClubs.DisplayMember = "Name";
             cboAvailableClubs.ValueMember = "ClubId";
 
-            _matches = new BindingList<Match>(
-                _context.Matches.Local
-                    .Where(m => m.LeagueId == league.LeagueId)
-                    .ToList()
-            );
-
+            // Load matches through Business Logic
+            _matches = _leagueOps.GetMatchesForLeague(league.LeagueId);
             dgvMatches.DataSource = _matches;
+        }
+
+        // Always dispose of the Operations class to free the database context
+        protected override void OnClosed(EventArgs e)
+        {
+            _leagueOps?.Dispose();
+            base.OnClosed(e);
         }
     }
 }
