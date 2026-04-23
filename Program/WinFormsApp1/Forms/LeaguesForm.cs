@@ -6,7 +6,7 @@ namespace WinFormsApp1
 {
     public partial class LeaguesForm : Form
     {
-        private LeagueOperations _leagueOps;
+        private LeagueOperation _leagueOps;
 
         private BindingList<League> _leagues;
         private BindingList<Club> _participants;
@@ -21,7 +21,7 @@ namespace WinFormsApp1
         private void LeaguesForm_Load(object sender, EventArgs e)
         {
             // Initialize the business logic layer
-            _leagueOps = new LeagueOperations();
+            _leagueOps = new LeagueOperation();
 
             _leagues = _leagueOps.GetBindingList();
             leagueBindingSource.DataSource = _leagues;

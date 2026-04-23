@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using WinFormsApp1.Data.Models;
 using WinFormsApp1.Logic;
 
 namespace WinFormsApp1.Business
 {
-    public class MatchOperations : BaseOperation<Match>
+    public class MatchOperation : BaseOperation<Match>
     {
         // Get all leagues for the dropdown
         public List<League> GetLeagues()
@@ -23,7 +24,10 @@ namespace WinFormsApp1.Business
         public List<Match> GetMatches(int leagueId)
         {
             return Context.Matches
-                .Where(m => m.LeagueId == leagueId) // Assuming Match has LeagueId
+                .Include(m => m.HomeClub) // Required for HomeClubName
+                .Include(m => m.AwayClub) // Required for AwayClubName
+                .Include(m => m.Goals)    // Required for the Result calculation
+                .Where(m => m.LeagueId == leagueId)
                 .ToList();
         }
 
@@ -107,23 +111,36 @@ namespace WinFormsApp1.Business
             Context.SaveChanges();
         }
 
-        // Example method to add an event. You will need the specific entity classes initialized here.
-        public void AddEvent(string type, int matchId, int minute, int playerId, int clubId)
+        public void AddEvent(string type, int matchId, int minute, int playerId)
         {
-            if (type == "Гол") Context.Goals.Add(new Goal { MatchId = matchId, Minute = minute, PlayerId = playerId, ClubId = clubId });
-            else if (type == "Фал") Context.Fouls.Add(new Foul { MatchId = matchId, Minute = minute, PlayerId = playerId, ClubId = clubId });
+            if (type == "Гол")
+            {
+                Context.Database.ExecuteSqlRaw(
+                    "INSERT INTO Goals (MatchId, Minute, PlayerId) VALUES ({0}, {1}, {2})",
+                    matchId, minute, playerId);
+            }
+            else if (type == "Фал")
+            {
+                Context.Database.ExecuteSqlRaw(
+                    "INSERT INTO Fouls (MatchId, Minute, PlayerId) VALUES ({0}, {1}, {2})",
+                    matchId, minute, playerId);
+            }
             else if (type == "Жълт картон" || type == "Червен картон")
-                Context.Cards.Add(new Card { MatchId = matchId, Minute = minute, PlayerId = playerId, ClubId = clubId, Type = type == "Жълт картон" ? "Yellow" : "Red" });
+            {
+                // FIX: Using the full strings "Yellow Card" and "Red Card" 
+                // to satisfy the database CHECK constraint.
+                string cardType = (type == "Жълт картон") ? "Yellow Card" : "Red Card";
 
-            Context.SaveChanges();
+                Context.Database.ExecuteSqlRaw(
+                    "INSERT INTO Cards (MatchId, Minute, PlayerId, Type) VALUES ({0}, {1}, {2}, {3})",
+                    matchId, minute, playerId, cardType);
+            }
         }
 
         public List<Player> GetPlayersByClub(int clubId)
         {
             // Returns only players belonging to the specific club
-            return Context.Players
-                .Where(p => p.ClubId == clubId)
-                .ToList();
+            return Context.Players.Where(p => p.ClubId == clubId).ToList();
         }
     }
 }

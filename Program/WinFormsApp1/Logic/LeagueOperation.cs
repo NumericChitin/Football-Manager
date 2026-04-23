@@ -5,9 +5,9 @@ using WinFormsApp1.Data.Models;
 
 namespace WinFormsApp1.Logic
 {
-    public class LeagueOperations : BaseOperation<League>
+    public class LeagueOperation : BaseOperation<League>
     {
-        public LeagueOperations() : base()
+        public LeagueOperation() : base()
         {
             // Eagerly load the related entities into the local context tracking
             db.Leagues.Include(l => l.Clubs).Load();

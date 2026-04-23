@@ -32,4 +32,19 @@ public partial class Match
     public string HomeClubName => HomeClub?.Name;
 
     public string AwayClubName => AwayClub?.Name;
+
+    public string Result
+    {
+        get
+        {
+            // Safety check: if Goals is null, return 0:0
+            if (Goals == null) return "0:0";
+
+            // Compare by ClubId for better reliability
+            int homeGoals = Goals.Count(g => g.ClubId == HomeClubId);
+            int awayGoals = Goals.Count(g => g.ClubId == AwayClubId);
+
+            return $"{homeGoals}:{awayGoals}";
+        }
+    }
 }

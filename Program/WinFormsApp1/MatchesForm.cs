@@ -8,17 +8,19 @@ namespace WinFormsApp1
 {
     public partial class MatchesForm : Form
     {
-        private MatchOperations _operations;
+        private MatchOperation _operations;
         private BindingList<Match> _matchesBinding;
         private BindingList<MatchEventViewModel> _eventsBinding;
 
         public MatchesForm()
         {
             InitializeComponent();
-            _operations = new MatchOperations();
+            _operations = new MatchOperation();
 
             dgvMatches.AutoGenerateColumns = false;
             dgvEvents.AutoGenerateColumns = false;
+
+            EventType.DataPropertyName = "EventType";
         }
 
         private void MatchesForm_Load(object sender, EventArgs e)
@@ -53,25 +55,36 @@ namespace WinFormsApp1
         {
             if (dgvMatches.CurrentRow?.DataBoundItem is Match selectedMatch)
             {
-                // 1. Fill Match Info
                 cboHomeClub.SelectedValue = selectedMatch.HomeClubId;
                 cboAwayClub.SelectedValue = selectedMatch.AwayClubId;
-                dtpMatchDate.Value = selectedMatch.Date.ToDateTime(TimeOnly.MinValue);
+
+                DateTime matchDateTime = selectedMatch.Date.ToDateTime(TimeOnly.MinValue);
+                if (matchDateTime < dtpMatchDate.MinDate)
+                    dtpMatchDate.Value = dtpMatchDate.MinDate;
+                else if (matchDateTime > dtpMatchDate.MaxDate)
+                    dtpMatchDate.Value = dtpMatchDate.MaxDate;
+                else
+                    dtpMatchDate.Value = matchDateTime;
+
                 cboRound.Text = selectedMatch.Round.ToString();
 
-                // 2. Load Events
                 _eventsBinding = new BindingList<MatchEventViewModel>(_operations.GetMatchEvents(selectedMatch.MatchId));
                 dgvEvents.DataSource = _eventsBinding;
 
-                // 3. Update Event Club Selection (Limit to the two teams playing)
                 UpdateEventClubs(selectedMatch);
             }
         }
 
         private void UpdateEventClubs(Match match)
         {
-            // We only want the Home and Away clubs to appear in the event dropdown
-            var competingClubs = new List<Club> { match.HomeClub, match.AwayClub };
+            var clubs = _operations.GetClubs();
+            var home = clubs.FirstOrDefault(c => c.ClubId == match.HomeClubId);
+            var away = clubs.FirstOrDefault(c => c.ClubId == match.AwayClubId);
+
+            var competingClubs = new List<Club>();
+            if (home != null) competingClubs.Add(home);
+            if (away != null) competingClubs.Add(away);
+
             cboEventClub.DataSource = new BindingList<Club>(competingClubs);
             cboEventClub.DisplayMember = "Name";
             cboEventClub.ValueMember = "ClubId";
@@ -133,22 +146,24 @@ namespace WinFormsApp1
         {
             if (dgvMatches.CurrentRow?.DataBoundItem is Match selectedMatch &&
                 cboEventType.SelectedItem != null &&
-                cboEventPlayer.SelectedValue != null)
+                cboEventPlayer.SelectedValue is int playerId)
             {
                 string type = cboEventType.SelectedItem.ToString();
                 int minute = (int)numericUpDownMinute.Value;
-                int playerId = (int)cboEventPlayer.SelectedValue;
-                int clubId = (int)cboEventClub.SelectedValue;
 
-                _operations.AddEvent(type, selectedMatch.MatchId, minute, playerId, clubId);
+                _operations.AddEvent(type, selectedMatch.MatchId, minute, playerId);
 
-                // Refresh the events grid to show the new event
+                // 1. Refresh Events Grid
                 _eventsBinding = new BindingList<MatchEventViewModel>(_operations.GetMatchEvents(selectedMatch.MatchId));
                 dgvEvents.DataSource = _eventsBinding;
-            }
-            else
-            {
-                MessageBox.Show("Моля, изберете клуб и играч за събитието.", "Внимание");
+
+                // 2. Refresh the Matches list so the new score (Result) shows up
+                // We re-fetch to ensure the Goals collection in the model is updated
+                if (cboLeague.SelectedValue is int leagueId)
+                {
+                    _matchesBinding = new BindingList<Match>(_operations.GetMatches(leagueId));
+                    dgvMatches.DataSource = _matchesBinding;
+                }
             }
         }
 
