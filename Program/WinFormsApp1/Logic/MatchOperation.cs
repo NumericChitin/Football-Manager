@@ -31,7 +31,7 @@ namespace WinFormsApp1.Business
                 .ToList();
         }
 
-        public void AddOrUpdateMatch(Match match)
+        public bool AddOrUpdateMatch(Match match)
         {
             if (match.MatchId == 0)
             {
@@ -39,9 +39,12 @@ namespace WinFormsApp1.Business
             }
             else
             {
-                Context.Matches.Update(match);
+                if (match.HomeClubId != match.AwayClubId) Context.Matches.Update(match);
+                else return false;
+
             }
             Context.SaveChanges();
+            return true;
         }
 
         public void DeleteMatch(int matchId)
@@ -87,7 +90,7 @@ namespace WinFormsApp1.Business
             {
                 EventId = c.CardId,
                 EventCategory = "Card",
-                EventType = c.Type == "Yellow" ? "Жълт картон" : "Червен картон",
+                EventType = c.Type == "жълт" ? "Жълт картон" : "Червен картон",
                 Minute = c.Minute,
                 PlayerName = c.Player.FullName,
                 ClubName = c.Club.Name,
@@ -129,7 +132,7 @@ namespace WinFormsApp1.Business
             {
                 // FIX: Using the full strings "Yellow Card" and "Red Card" 
                 // to satisfy the database CHECK constraint.
-                string cardType = (type == "Жълт картон") ? "Yellow Card" : "Red Card";
+                string cardType = (type == "Жълт картон") ? "жълт" : "червен";
 
                 Context.Database.ExecuteSqlRaw(
                     "INSERT INTO Cards (MatchId, Minute, PlayerId, Type) VALUES ({0}, {1}, {2}, {3})",

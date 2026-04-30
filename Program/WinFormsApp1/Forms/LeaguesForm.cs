@@ -16,6 +16,12 @@ namespace WinFormsApp1
         public LeaguesForm()
         {
             InitializeComponent();
+            ToolTip tooltip = new ToolTip();
+            tooltip.InitialDelay = 1000;
+            tooltip.AutoPopDelay = 5000;
+            tooltip.ReshowDelay = 2000;
+            tooltip.SetToolTip(this.label3, "Формат: YYYY/YYYY");
+            tooltip.SetToolTip(this.tbSeason, "Формат: YYYY/YYYY");
         }
 
         private void LeaguesForm_Load(object sender, EventArgs e)

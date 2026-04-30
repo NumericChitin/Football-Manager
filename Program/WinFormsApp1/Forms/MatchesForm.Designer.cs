@@ -31,6 +31,12 @@
             cboLeague = new ComboBox();
             label1 = new Label();
             dgvMatches = new DataGridView();
+            MatchId = new DataGridViewTextBoxColumn();
+            HomeClubName = new DataGridViewTextBoxColumn();
+            AwayClubName = new DataGridViewTextBoxColumn();
+            Date = new DataGridViewTextBoxColumn();
+            Round = new DataGridViewTextBoxColumn();
+            MatchResult = new DataGridViewTextBoxColumn();
             label2 = new Label();
             label3 = new Label();
             cboHomeClub = new ComboBox();
@@ -61,12 +67,6 @@
             cboEventClub = new ComboBox();
             label12 = new Label();
             cboEventPlayer = new ComboBox();
-            MatchId = new DataGridViewTextBoxColumn();
-            HomeClubName = new DataGridViewTextBoxColumn();
-            AwayClubName = new DataGridViewTextBoxColumn();
-            Date = new DataGridViewTextBoxColumn();
-            Round = new DataGridViewTextBoxColumn();
-            MatchResult = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)dgvMatches).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvEvents).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownMinute).BeginInit();
@@ -103,6 +103,58 @@
             dgvMatches.Size = new Size(618, 245);
             dgvMatches.TabIndex = 5;
             dgvMatches.SelectionChanged += dgvMatches_SelectionChanged;
+            // 
+            // MatchId
+            // 
+            MatchId.DataPropertyName = "MatchId";
+            MatchId.HeaderText = "ID";
+            MatchId.MinimumWidth = 6;
+            MatchId.Name = "MatchId";
+            MatchId.ReadOnly = true;
+            MatchId.Width = 50;
+            // 
+            // HomeClubName
+            // 
+            HomeClubName.DataPropertyName = "HomeClubName";
+            HomeClubName.HeaderText = "Домакин";
+            HomeClubName.MinimumWidth = 6;
+            HomeClubName.Name = "HomeClubName";
+            HomeClubName.ReadOnly = true;
+            HomeClubName.Width = 160;
+            // 
+            // AwayClubName
+            // 
+            AwayClubName.DataPropertyName = "AwayClubName";
+            AwayClubName.HeaderText = "Гост";
+            AwayClubName.MinimumWidth = 6;
+            AwayClubName.Name = "AwayClubName";
+            AwayClubName.ReadOnly = true;
+            AwayClubName.Width = 160;
+            // 
+            // Date
+            // 
+            Date.DataPropertyName = "Date";
+            Date.HeaderText = "Дата";
+            Date.MinimumWidth = 6;
+            Date.Name = "Date";
+            Date.ReadOnly = true;
+            Date.Width = 75;
+            // 
+            // Round
+            // 
+            Round.DataPropertyName = "Round";
+            Round.HeaderText = "Рунд";
+            Round.Name = "Round";
+            Round.ReadOnly = true;
+            Round.Width = 45;
+            // 
+            // MatchResult
+            // 
+            MatchResult.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            MatchResult.DataPropertyName = "Result";
+            MatchResult.HeaderText = "Резултат";
+            MatchResult.Name = "MatchResult";
+            MatchResult.ReadOnly = true;
             // 
             // label2
             // 
@@ -399,7 +451,6 @@
             cboEventPlayer.DropDownStyle = ComboBoxStyle.DropDownList;
             cboEventPlayer.Font = new Font("Segoe UI", 14F);
             cboEventPlayer.FormattingEnabled = true;
-            cboEventPlayer.Items.AddRange(new object[] { "Гол", "Жълт картон", "Червен картон", "Фал" });
             cboEventPlayer.Location = new Point(644, 546);
             cboEventPlayer.Name = "cboEventPlayer";
             cboEventPlayer.Size = new Size(129, 33);

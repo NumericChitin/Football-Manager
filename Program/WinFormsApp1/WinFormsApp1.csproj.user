@@ -11,7 +11,7 @@
     <Compile Update="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="MatchesForm.cs">
+    <Compile Update="Forms\MatchesForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\PlayersForm.cs">

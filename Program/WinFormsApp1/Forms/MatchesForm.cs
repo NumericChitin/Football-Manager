@@ -40,14 +40,24 @@ namespace WinFormsApp1
             cboAwayClub.DataSource = new BindingList<Club>(clubs);
             cboAwayClub.DisplayMember = "Name";
             cboAwayClub.ValueMember = "ClubId";
+
+            // Load matches in dgvMatches on startup
+            LoadLeagueMatchesToDgv();
         }
 
         private void cboLeague_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LoadLeagueMatchesToDgv();
+        }
+
+        private void LoadLeagueMatchesToDgv()
         {
             if (cboLeague.SelectedValue is int leagueId)
             {
                 _matchesBinding = new BindingList<Match>(_operations.GetMatches(leagueId));
                 dgvMatches.DataSource = _matchesBinding;
+
+                if (_matchesBinding.Count == 0) dgvEvents.DataSource = null;
             }
         }
 
@@ -128,7 +138,11 @@ namespace WinFormsApp1
                 selectedMatch.Date = DateOnly.FromDateTime(dtpMatchDate.Value);
                 selectedMatch.Round = int.Parse(cboRound.Text);
 
-                _operations.AddOrUpdateMatch(selectedMatch);
+                bool successfulSave = _operations.AddOrUpdateMatch(selectedMatch);
+                if (!successfulSave)
+                {
+                    MessageBox.Show("Не може домакин и гост да са един клуб", "Грешка");
+                }
                 dgvMatches.Refresh();
             }
         }
@@ -179,7 +193,7 @@ namespace WinFormsApp1
         private void buttonSaveChangesEvents_Click(object sender, EventArgs e)
         {
             // Usually handled dynamically on Add/Delete, or you can implement batch saving in MatchOperations.
-            MessageBox.Show("Използвайте 'Добави' и 'Изтрий' за управление на събитията.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Използвайте 'Добави' и 'Изтрий' за управление на събитията. Бутонът съществува за по-добър дизайн.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
