@@ -1,10 +1,12 @@
+using WinFormsApp1.Forms;
+
 namespace WinFormsApp1
 {
     public partial class MainForm : Form
     {
         public MainForm()
         {
-            InitializeComponent();
+            InitializeComponent(); //Make MatchesForm NOT change the match when adding an event
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -35,6 +37,12 @@ namespace WinFormsApp1
         {
             MatchesForm matchesForm = new MatchesForm();
             matchesForm.ShowDialog();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            StatsForm statsForm = new StatsForm();
+            statsForm.ShowDialog();
         }
     }
 }

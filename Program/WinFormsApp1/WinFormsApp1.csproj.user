@@ -17,6 +17,9 @@
     <Compile Update="Forms\PlayersForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\StatsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\TransfersForm.cs">
       <SubType>Form</SubType>
     </Compile>

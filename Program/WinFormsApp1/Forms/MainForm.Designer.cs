@@ -33,6 +33,7 @@
             button3 = new Button();
             button4 = new Button();
             buttonOpenMatches = new Button();
+            button5 = new Button();
             SuspendLayout();
             // 
             // button1
@@ -90,11 +91,23 @@
             buttonOpenMatches.UseVisualStyleBackColor = true;
             buttonOpenMatches.Click += buttonOpenMatches_Click;
             // 
+            // button5
+            // 
+            button5.Location = new Point(54, 195);
+            button5.Margin = new Padding(3, 2, 3, 2);
+            button5.Name = "button5";
+            button5.Size = new Size(161, 100);
+            button5.TabIndex = 5;
+            button5.Text = "Отвори класирането";
+            button5.UseVisualStyleBackColor = true;
+            button5.Click += button5_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(700, 338);
+            Controls.Add(button5);
             Controls.Add(buttonOpenMatches);
             Controls.Add(button4);
             Controls.Add(button3);
@@ -113,5 +126,6 @@
         private Button button3;
         private Button button4;
         private Button buttonOpenMatches;
+        private Button button5;
     }
 }
