@@ -358,7 +358,7 @@
             Controls.Add(dgvParticipants);
             Controls.Add(dgvLeagues);
             Name = "LeaguesForm";
-            Text = "LeaguesForm";
+            Text = "Лиги";
             Load += LeaguesForm_Load;
             ((System.ComponentModel.ISupportInitialize)dgvLeagues).EndInit();
             ((System.ComponentModel.ISupportInitialize)leagueBindingSource).EndInit();

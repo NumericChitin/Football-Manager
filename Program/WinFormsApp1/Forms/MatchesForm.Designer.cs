@@ -543,7 +543,7 @@
             Controls.Add(label1);
             Controls.Add(cboLeague);
             Name = "MatchesForm";
-            Text = "MatchesForm";
+            Text = "Мачове";
             Load += MatchesForm_Load;
             ((System.ComponentModel.ISupportInitialize)dgvMatches).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvEvents).EndInit();

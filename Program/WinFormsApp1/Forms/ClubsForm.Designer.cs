@@ -204,7 +204,7 @@ namespace WinFormsApp1
             Controls.Add(dataGridViewClubs);
             Controls.Add(buttonAdd);
             Name = "ClubsForm";
-            Text = "ClubsForm";
+            Text = "Клубове";
             FormClosing += ClubsForm_FormClosing;
             Load += ClubsForm_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridViewClubs).EndInit();

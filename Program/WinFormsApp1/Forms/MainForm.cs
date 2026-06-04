@@ -6,7 +6,7 @@ namespace WinFormsApp1
     {
         public MainForm()
         {
-            InitializeComponent(); //Make MatchesForm NOT change the match when adding an event
+            InitializeComponent();
         }
 
         private void button1_Click(object sender, EventArgs e)

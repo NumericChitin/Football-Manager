@@ -118,7 +118,7 @@
             Controls.Add(label9);
             Controls.Add(cboLeague);
             Name = "StatsForm";
-            Text = "StatsForm";
+            Text = "Статистика";
             Load += StatsForm_Load;
             ((System.ComponentModel.ISupportInitialize)dgvStats).EndInit();
             ResumeLayout(false);

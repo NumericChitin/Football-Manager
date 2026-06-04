@@ -54,7 +54,13 @@ namespace WinFormsApp1
                 if (player == null) return;
 
                 dateTimePickerBirthDate.Value = player.DateOfBirth.ToDateTime(TimeOnly.MinValue);
+
+                // Lock the dropdown if the player exists in the DB (Id > 0)
+                comboBoxClubName.Enabled = (player.PlayerId == 0);
             };
+
+            // Lock the dropdown initially to prevent changes to the club before a SelectionChanged event has occured
+            comboBoxClubName.Enabled = false;
         }
 
 
@@ -88,6 +94,9 @@ namespace WinFormsApp1
             };
 
             Op.Add(newPlayer);
+
+            // Make sure the combo box is enabled for the new player entry
+            comboBoxClubName.Enabled = true;
 
             int rowIndex = playerBindingSource.IndexOf(newPlayer);
             if (rowIndex >= 0)

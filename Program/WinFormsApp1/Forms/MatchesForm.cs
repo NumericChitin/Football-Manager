@@ -162,31 +162,72 @@ namespace WinFormsApp1
                 cboEventType.SelectedItem != null &&
                 cboEventPlayer.SelectedValue is int playerId)
             {
+                // 1. Save the ID of the match currently being edited
+                int savedMatchId = selectedMatch.MatchId;
+
                 string type = cboEventType.SelectedItem.ToString();
                 int minute = (int)numericUpDownMinute.Value;
 
-                _operations.AddEvent(type, selectedMatch.MatchId, minute, playerId);
+                _operations.AddEvent(type, savedMatchId, minute, playerId);
 
-                // 1. Refresh Events Grid
-                _eventsBinding = new BindingList<MatchEventViewModel>(_operations.GetMatchEvents(selectedMatch.MatchId));
+                // 2. Refresh Events Grid
+                _eventsBinding = new BindingList<MatchEventViewModel>(_operations.GetMatchEvents(savedMatchId));
                 dgvEvents.DataSource = _eventsBinding;
 
-                // 2. Refresh the Matches list so the new score (Result) shows up
-                // We re-fetch to ensure the Goals collection in the model is updated
+                // 3. Refresh the Matches list so the new score (Result) shows up
                 if (cboLeague.SelectedValue is int leagueId)
                 {
+                    // CRITICAL: Unhook event to stop the grid from firing selection changes while rebuilding
+                    dgvMatches.SelectionChanged -= dgvMatches_SelectionChanged;
+
                     _matchesBinding = new BindingList<Match>(_operations.GetMatches(leagueId));
                     dgvMatches.DataSource = _matchesBinding;
+
+                    // 4. Find the row we were just on and restore focus to it
+                    for (int i = 0; i < dgvMatches.Rows.Count; i++)
+                    {
+                        if (dgvMatches.Rows[i].DataBoundItem is Match m && m.MatchId == savedMatchId)
+                        {
+                            dgvMatches.CurrentCell = dgvMatches.Rows[i].Cells[0];
+                            break;
+                        }
+                    }
+
+                    // Re-hook the event handler now that selection context is restored
+                    dgvMatches.SelectionChanged += dgvMatches_SelectionChanged;
                 }
             }
         }
 
         private void buttonDeleteEvent_Click(object sender, EventArgs e)
         {
-            if (dgvEvents.CurrentRow?.DataBoundItem is MatchEventViewModel selectedEvent)
+            if (dgvEvents.CurrentRow?.DataBoundItem is MatchEventViewModel selectedEvent &&
+                dgvMatches.CurrentRow?.DataBoundItem is Match selectedMatch)
             {
+                int savedMatchId = selectedMatch.MatchId;
+
                 _operations.DeleteEvent(selectedEvent.EventCategory, selectedEvent.EventId);
                 _eventsBinding.Remove(selectedEvent);
+
+                // Refresh the match list in case a Goal was deleted (modifying the score)
+                if (cboLeague.SelectedValue is int leagueId)
+                {
+                    dgvMatches.SelectionChanged -= dgvMatches_SelectionChanged;
+
+                    _matchesBinding = new BindingList<Match>(_operations.GetMatches(leagueId));
+                    dgvMatches.DataSource = _matchesBinding;
+
+                    for (int i = 0; i < dgvMatches.Rows.Count; i++)
+                    {
+                        if (dgvMatches.Rows[i].DataBoundItem is Match m && m.MatchId == savedMatchId)
+                        {
+                            dgvMatches.CurrentCell = dgvMatches.Rows[i].Cells[0];
+                            break;
+                        }
+                    }
+
+                    dgvMatches.SelectionChanged += dgvMatches_SelectionChanged;
+                }
             }
         }
 

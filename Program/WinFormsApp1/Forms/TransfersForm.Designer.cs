@@ -484,7 +484,7 @@
             Controls.Add(buttonAdd);
             Controls.Add(dataGridView1);
             Name = "TransfersForm";
-            Text = "TransfersForm";
+            Text = "Трансфери";
             Load += TransfersForm_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)transferBindingSource).EndInit();

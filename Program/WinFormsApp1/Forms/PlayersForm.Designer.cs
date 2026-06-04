@@ -329,6 +329,7 @@
             // 
             // comboBoxDominantFoot
             // 
+            comboBoxDominantFoot.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxDominantFoot.FormattingEnabled = true;
             comboBoxDominantFoot.Location = new Point(230, 176);
             comboBoxDominantFoot.Margin = new Padding(3, 4, 3, 4);
@@ -338,6 +339,7 @@
             // 
             // comboBoxPosition
             // 
+            comboBoxPosition.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxPosition.FormattingEnabled = true;
             comboBoxPosition.Location = new Point(865, 60);
             comboBoxPosition.Margin = new Padding(3, 4, 3, 4);
@@ -347,7 +349,7 @@
             // 
             // comboBoxClubName
             // 
-            comboBoxClubName.Enabled = false;
+            comboBoxClubName.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxClubName.FormattingEnabled = true;
             comboBoxClubName.Location = new Point(865, 176);
             comboBoxClubName.Margin = new Padding(3, 4, 3, 4);
@@ -365,6 +367,7 @@
             // 
             // comboBoxStatus
             // 
+            comboBoxStatus.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxStatus.FormattingEnabled = true;
             comboBoxStatus.Location = new Point(657, 176);
             comboBoxStatus.Margin = new Padding(3, 4, 3, 4);
@@ -401,7 +404,7 @@
             Controls.Add(buttonAdd);
             Margin = new Padding(3, 4, 3, 4);
             Name = "PlayersForm";
-            Text = "PlayersForm";
+            Text = "Играчи";
             FormClosing += PlayersForm_FormClosing;
             Load += PlayersForm_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridViewPlayers).EndInit();
